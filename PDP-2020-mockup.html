@@ -10,9 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://www.worktop-express.co.uk/wood_worktops/oak_worktops.html">
     <meta property="fb:app_id" content="1100030143381699">
-    <base href="https://www.worktop-express.co.uk/">
     <meta property="og:image" content="http://www.worktop-express.co.uk/media/meta-images/worktop-express-solid-wood-worktops-xl.jpg">
-    <link rel="icon" href="/media/favicon.ico">
     <link rel="stylesheet" media="all" type="text/css" href="https://www.worktop-express.co.uk/skins/skin2019_redesign/css/bootstrap-grid.css?v=05">
     <!-- Depreciated CSS to be removed on redesign completion -->
     <!-- <link rel="stylesheet" media="all" type="text/css" href="https://www.worktop-express.co.uk/skins/skin2019_redesign/css/all.css?v=01112018" /> -->
@@ -263,175 +261,13 @@
     <title>PDP 2020</title>
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
+
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <style>
-        body {
-            font-size: 16px;
-            font-family: 'work sans';
-            font-weight: 300;
-            color: #4d4a49;
-        }
-        
-        h1 {
-            font-weight: inherit;
-        }
-        
-        ul {
-            padding-left: 30px;
-            line-height: 2;
-        }
-        
-        button {
-            font-family: inherit;
-        }
-        
-        p:first-of-type {
-            margin-top: 0;
-        }
-        
-        p:last-of-type {
-            margin-bottom: 0;
-        }
-        
-        .collapse-box {
-            overflow: hidden;
-            cursor: pointer;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .1);
-        }
-        
-        .collapse-box__head {
-            position: relative;
-            padding: 24px;
-            background-color: #f5f3f2;
-        }
-        
-        .collapse-box__head::after {
-            content: '';
-            display: inline-block;
-            margin-left: 10px;
-            /* position: absolute; */
-            /* right: 20px; */
-            /* top: 50%; */
-            transform: translateY(-25%) rotate(45deg);
-            height: 6px;
-            width: 6px;
-            border-right: 2px solid #4D4A49;
-            border-bottom: 2px solid #4D4A49;
-            transition: transform 0.2s;
-        }
-        
-        .collapse-box--open>.collapse-box__head::after {
-            transform: translateY(-25%) rotate(-135deg);
-        }
-        
-        .collapse-box__wrap {
-            transition: .4s;
-            height: 0;
-            position: relative;
-            border: 1px solid rgba(0, 0, 0, 0.1)
-        }
-        
-        .image-slider {}
-        
-        .image-slider__wrap {}
-        
-        .image-slider__img {
-            width: 100%;
-        }
-        
-        .products-usp__icon {
-            max-height: 23px;
-            max-width: 20px;
-        }
-        
-        @media (min-width: 768px) {
-            .products-usp__icon {
-                max-height: none;
-                max-width: none;
-            }
-        }
-        
-        .zoom-slider {
-            overflow: hidden;
-        }
-        
-        .zoom-slider__wrap {
-            display: flex;
-            overflow: hidden;
-        }
-        
-        .zoom-slider__item {
-            position: relative;
-            width: 100%;
-        }
-        
-        .zoom-slider__item__zoom {
-            position: absolute;
-            top: 0;
-            left: 0;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            transition: opacity 0.2s;
-            opacity: 0;
-        }
-        
-        .zoom-slider__item__zoom--active {
-            opacity: 1;
-        }
-        
-        .zoom-slider__preview {
-            display: flex;
-            margin-left: -6px;
-            margin-right: -6px;
-        }
-        
-        .zoom-slider__preview__item {
-            margin: 10px 6px;
-            padding: 1px;
-            background-color: #fff;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .2);
-            opacity: .4;
-        }
-        
-        .zoom-slider__preview__item--active {
-            opacity: 1;
-        }
-        
-        .review-stars__star {
-            filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.2));
-        }
-        
-        .table {
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-collapse: collapse;
-            border-radius: 2px;
-            border-spacing: 0;
-        }
-        
-        .table tr {}
-        
-        .table tr:nth-child(even) {
-            background-color: #f5f3f2;
-        }
-        
-        .table td {
-            padding: 10px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        }
-        
-        #product-info {
-            margin-bottom: 0;
-        }
-        
-        @media (min-width: 768px) {
-            #product-info {
-                margin-bottom: 120px;
-            }
-        }
-    </style>
     <!-- Main content wrapper START -->
     <main class="container">
         <div class="breadcrumbs font-12 d-flex flex-wrap align-items-center capitalize">
@@ -447,16 +283,20 @@
             <div class="col-md-7" id="product-images">
                 <!-- Images section -->
                 <div class="zoom-slider">
-                    <div class="zoom-slider__wrap">
-                        <div class="zoom-slider__item" data-slider-item="0">
-                            <img src="https://res.cloudinary.com/dy7hqiitw/image/upload/w_717,f_auto,q_auto/wood/narrow-stave-american-walnut/narrow-stave-american-walnut-worktop-corner.jpg" alt="">
-                            <img class="zoom-slider__item__zoom" data-src="https://res.cloudinary.com/dy7hqiitw/image/upload/w_1434,f_auto,q_auto/wood/narrow-stave-american-walnut/narrow-stave-american-walnut-worktop-corner.jpg" alt="">
-                        </div>
-                        <div class="zoom-slider__item" data-slider-item="1">
-                            <img src="https://res.cloudinary.com/dy7hqiitw/image/upload/w_717,f_auto,q_auto/wood/narrow-stave-american-walnut/narrow-stave-american-walnut-worktop-swatch.jpg" alt="">
-                        </div>
-                        <div class="zoom-slider__item" data-slider-item="2">
-                            <img src="https://res.cloudinary.com/dy7hqiitw/image/upload/w_717,f_auto,q_auto/wood/narrow-stave-american-walnut/narrow-stave-american-walnut-worktop-edge.jpg" alt="">
+                    <div class="zoom-slider__main">
+                        <div class="zoom-slider__wrap">
+                            <div class="zoom-slider__item" data-slider-item="0">
+                                <img src="https://res.cloudinary.com/dy7hqiitw/image/upload/w_717,f_auto,q_auto/wood/narrow-stave-american-walnut/narrow-stave-american-walnut-worktop-corner.jpg" alt="">
+                                <img class="zoom-slider__item__zoom" data-src="https://res.cloudinary.com/dy7hqiitw/image/upload/w_1434,f_auto,q_auto/wood/narrow-stave-american-walnut/narrow-stave-american-walnut-worktop-corner.jpg" alt="">
+                            </div>
+                            <div class="zoom-slider__item" data-slider-item="1">
+                                <img src="https://res.cloudinary.com/dy7hqiitw/image/upload/w_717,f_auto,q_auto/wood/narrow-stave-american-walnut/narrow-stave-american-walnut-worktop-swatch.jpg" alt="">
+                                <img class="zoom-slider__item__zoom" data-src="https://res.cloudinary.com/dy7hqiitw/image/upload/w_1434,f_auto,q_auto/wood/narrow-stave-american-walnut/narrow-stave-american-walnut-worktop-swatch.jpg" alt="">
+                            </div>
+                            <div class="zoom-slider__item" data-slider-item="2">
+                                <img src="https://res.cloudinary.com/dy7hqiitw/image/upload/w_717,f_auto,q_auto/wood/narrow-stave-american-walnut/narrow-stave-american-walnut-worktop-edge.jpg" alt="">
+                                <img class="zoom-slider__item__zoom" data-src="https://res.cloudinary.com/dy7hqiitw/image/upload/w_1434,f_auto,q_auto/wood/narrow-stave-american-walnut/narrow-stave-american-walnut-worktop-edge.jpg" alt="">
+                            </div>
                         </div>
                     </div>
                     <div class="zoom-slider__preview">
@@ -817,122 +657,7 @@
     </main>
 
 
-    <script>
-        class ZoomSlider {
-            constructor(sliderSelector) {
-                this.slider = document.querySelector(sliderSelector);
-                this.wrap = this.slider.querySelector('.zoom-slider__wrap');
-                this.items = this.slider.querySelectorAll('.zoom-slider__item');
-                this.preview = {
-                    wrap: this.slider.querySelector('.zoom-slider__preview'),
-                    items: this.slider.querySelectorAll('.zoom-slider__preview__item'),
-                }
-                this.currentItemSize = {
-                    width: null,
-                    height: null
-                }
-                this.zoomItem;
-                this.init()
-            }
-            zoomEnter = () => {
-                const el = event.currentTarget
-                el.addEventListener('mouseleave', this.zoomLeave.bind(this, el))
-                el.addEventListener('mousemove', this.zoomMove.bind(this, el))
-                    //Set the dimentions of the currently hovered item for use in transforms
-                this.currentItemSize.width = el.offsetWidth;
-                this.currentItemSize.height = el.offsetHeight;
-                this.zoomItem = el.querySelector('.zoom-slider__item__zoom')
-                this.showZoomItem()
-            }
-            zoomMove = (el) => {
-                let rect = el.getBoundingClientRect();
-                const position = {
-                        x: event.pageX - rect.left,
-                        y: event.pageY - rect.top
-                    }
-                    // Convert position to a percentage to be used in transform
-                const percentage = {
-                    x: ((position.x / this.currentItemSize.width) * 100).toFixed(2) - 0,
-                    y: ((position.y / this.currentItemSize.height) * 100).toFixed(2) - 0
-                }
-                console.log(position, percentage)
-                this.zoomItem.style.transform = `translate(${-(percentage.x) / 2}%, ${-(percentage.y) / 2}%)`
-            }
-            zoomLeave = (el) => {
-                el.removeEventListener('mousemove', this.zoomMove)
-                this.hideZoomItem()
-
-            }
-            showZoomItem = () => {
-                const [source, dataSource] = [this.zoomItem.getAttribute('src'), this.zoomItem.getAttribute('data-src')]
-                // Set real source based on data source only if src is not already set.
-                if (!source) {
-                    this.zoomItem.setAttribute('src', dataSource)
-                }
-                this.zoomItem.classList.add('zoom-slider__item__zoom--active')
-            }
-            hideZoomItem = () => {
-                this.zoomItem.classList.remove('zoom-slider__item__zoom--active')
-            }
-            init() {
-                console.log(this)
-                this.items.forEach(item => item.addEventListener('mouseover', this.zoomEnter))
-            }
-        }
-        const mainProductSlider = document.querySelector('.zoom-slider')
-        const zoomSlider = new ZoomSlider('.zoom-slider')
-
-        class CollapseBox {
-            constructor(element, boxname) {
-                this.element = element
-                this.head = this.element.querySelector('.collapse-box__head');
-                this.wrap = this.element.querySelector('.collapse-box__wrap');
-                this.config = {
-                    open: this.element.getAttribute('data-open')
-                }
-                this.init()
-            }
-
-            open = () => {
-                this.head.removeEventListener('click', this.open)
-                this.head.addEventListener('click', this.close)
-                this.wrapHeight = this.wrap.scrollHeight;
-                this.wrap.style.height = `${this.wrapHeight}px`;
-                this.element.classList.add('collapse-box--open')
-                this.wrap.addEventListener('transitionend', this.heightAuto)
-            }
-
-            close = () => {
-                this.head.removeEventListener('click', this.close)
-                this.head.addEventListener('click', this.open)
-                this.wrap.removeEventListener('transitionend', this.heightAuto)
-
-                requestAnimationFrame(() => {
-                    this.wrapHeight = this.wrap.scrollHeight;
-                    this.wrap.style.height = `${this.wrapHeight}px`;
-                    requestAnimationFrame(() => {
-                        this.wrap.style.height = '0px';
-                    })
-                })
-                this.element.classList.remove('collapse-box--open')
-            }
-
-            heightAuto = () => {
-                this.wrap.style.height = 'auto'
-            }
-
-            handleDefaultState = () => {
-                this.config.open !== null && this.open()
-            }
-
-            init() {
-                this.head.addEventListener('click', this.open)
-                this.handleDefaultState()
-            }
-        }
-        const collapseBoxes = document.querySelectorAll('.collapse-box');
-        for (const el of collapseBoxes) new CollapseBox(el)
-    </script>
+    <script src="./script.js"></script>
 
 </body>
 
