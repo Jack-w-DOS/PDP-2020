@@ -1,3 +1,15 @@
+/* @media (min-width: 768px) {
+
+  }
+  
+  @media (min-width: 992px) {
+
+  }
+  
+  @media (min-width: 1294px) {
+
+  } */
+
 body {
     font-size: 16px;
     font-family: 'work sans';
@@ -95,13 +107,15 @@ p:last-of-type {
 
 .zoom-slider__wrap {
     display: flex;
-    transition: 0.2s;
+    transition: transform 0.4s;
+    will-change: transform;
 }
 
 .zoom-slider__item {
     position: relative;
-    width: 100%;
 }
+
+.zoom-slider__item img {}
 
 .zoom-slider__item__zoom {
     position: absolute;
@@ -127,7 +141,7 @@ p:last-of-type {
     border-radius: 50%;
     background-color: #928f8f;
     cursor: pointer;
-    opacity: .6;
+    opacity: .4;
     pointer-events: none;
 }
 
@@ -167,16 +181,70 @@ p:last-of-type {
 
 .zoom-slider__preview {
     display: flex;
-    margin-left: -6px;
-    margin-right: -6px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+@media (min-width: 768px) {
+    .zoom-slider__preview {
+        margin-left: -6px;
+        margin-right: -6px;
+        margin-top: initial;
+        justify-content: unset;
+    }
 }
 
 .zoom-slider__preview__item {
-    margin: 10px 6px;
-    padding: 1px;
-    background-color: #fff;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .2);
     opacity: .4;
+    width: 11px;
+    height: 11px;
+    background-color: #928f8f;
+    border-radius: 50%;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+@media (min-width: 768px) {
+    .zoom-slider__preview__item {
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .2);
+        opacity: .4;
+        width: auto;
+        height: auto;
+        background-color: #928f8f;
+        border-radius: 50%;
+    }
+}
+
+.zoom-slider__preview__item img {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .zoom-slider__preview__item img {
+        display: block;
+    }
+}
+
+.zoom-slider__preview__item img {
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .zoom-slider__preview__item {
+        margin: 10px 6px;
+        padding: 1px;
+        background-color: #fff;
+        max-width: 62px;
+        max-height: 62px;
+    }
+}
+
+@media (min-width: 1294px) {
+    .zoom-slider__preview__item {
+        max-width: none;
+        max-height: none;
+    }
 }
 
 .zoom-slider__preview__item--active {
@@ -211,6 +279,6 @@ p:last-of-type {
 
 @media (min-width: 768px) {
     #product-info {
-        margin-bottom: 120px;
+        /* margin-bottom: 120px; */
     }
 }
