@@ -1,3 +1,5 @@
+import './style.css';
+
 class ZoomSlider {
     constructor(sliderSelector) {
         this.slider = document.querySelector(sliderSelector);
