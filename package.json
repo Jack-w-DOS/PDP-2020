@@ -5,7 +5,7 @@
     "main": "script.js",
     "scripts": {
         "build": "webpack",
-        "start": "webpack-dev-server"
+        "start": "webpack-dev-server --open --hot --host 0.0.0.0 --port 3000"
     },
     "repository": {
         "type": "git",
