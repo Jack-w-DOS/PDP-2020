@@ -1,4 +1,4 @@
-import './style.css';
+import "./style.css";
 
 class ZoomSlider {
     constructor(sliderSelector) {
@@ -26,10 +26,17 @@ class ZoomSlider {
         this.activeSlide = 0;
         this.doubleTap = false;
         this.zoomed = false;
+        this.touch = {
+            start: null,
+            move: null,
+            end: null,
+            dist: null,
+        };
         this.init();
     }
     zoomEnter = () => {
         const el = event.currentTarget;
+        console.log(event);
         el.addEventListener("mouseleave", this.zoomLeave.bind(this, el));
         el.addEventListener("mousemove", this.zoomMove.bind(this, el));
         //Set the dimentions of the currently hovered item for use in transforms
@@ -37,14 +44,18 @@ class ZoomSlider {
         this.currentItemSize.height = el.offsetHeight;
         this.zoomItem = el.querySelector(".zoom-slider__item__zoom");
         this.showZoomItem();
-        this.zoomed = true
+        this.zoomed = true;
     };
     zoomMove = (el) => {
-        if (!this.zoomed) return
+        console.log("zoomMove", this.zoomed);
+        console.log(this);
+        console.log(el);
+        if (!this.zoomed) return;
         let rect = el.getBoundingClientRect();
+        console.log(event);
         const position = {
-            x: event.pageX - rect.left,
-            y: event.pageY - rect.top,
+            x: event.pageX || event.touches[0].clientX - rect.left,
+            y: event.pageY || event.touches[0].clientY - rect.top,
         };
         // Convert position to a percentage to be used in transform
         const percentage = {
@@ -60,7 +71,7 @@ class ZoomSlider {
     zoomLeave = (el) => {
         el.removeEventListener("mousemove", this.zoomMove);
         this.hideZoomItem();
-        this.zoomed = false
+        this.zoomed = false;
     };
     showZoomItem = () => {
         // Loop through the picture element replacing data-src/set with src/set
@@ -83,19 +94,79 @@ class ZoomSlider {
         this.zoomItem.classList.remove("zoom-slider__item__zoom--active");
     };
     touchZoom = () => {
-        const time = new Date().getTime()
-        const timeDiff = time - this.doubleTap
-        console.log(timeDiff)
+        event.preventDefault();
+        const time = new Date().getTime();
+        const timeDiff = time - this.doubleTap;
+        const el = event.currentTarget;
+        this.currentItemSize.width = el.offsetWidth;
+        this.currentItemSize.height = el.offsetHeight;
+        this.touch.start = event.touches[0].clientX;
+        this.zoomItem = el.querySelector(".zoom-slider__item__zoom");
         // If double taped (two taps under 500ms)
         if (timeDiff < 500) {
             // Zoom toggle
             this.zoomed = !this.zoomed;
-            if (this.zoomed) {
-                this.zoomMove.bind(this)
+        }
+        el.addEventListener("touchmove", this.touchMove);
+        if (this.zoomed) {
+            el.removeEventListener("touchmove", this.touchMove);
+            this.showZoomItem();
+            this.zoomMove.call(this, event.currentTarget);
+        } else {
+            this.hideZoomItem();
+            this.wrap.style.transition = "none";
+        }
+        el.addEventListener("touchend", this.touchEnd);
+        this.doubleTap = new Date().getTime();
+        console.log("touchzoom");
+    };
+    touchMove = () => {
+        console.log("touch move");
+        this.touch.move = event.touches[0].clientX;
+        this.touch.dist = this.touch.start - this.touch.move;
+
+        this.wrap.style.transform = `translateX(-${
+            this.currentSlidePosition + this.touch.dist
+        }px)`;
+    };
+    touchEnd = () => {
+        console.log("touch end");
+        // this.touch.end = event.touches[0].clientX;
+        this.currentSlidePosition += this.touch.dist;
+        this.wrap.style.transition = null;
+        this.centerSlide();
+    };
+    centerSlide = () => {
+        var calc =
+            this.currentSlidePosition -
+            this.slideWidth +
+            this.slideWidth / 2 +
+            this.slideWidth / 1;
+        const needle = this.currentSlidePosition;
+        const lengthArray = Array.from(this.items).map(
+            (item, i) => this.slideWidth * i
+        );
+        let arrayIndex = 0;
+        // if (this.currentSlidePosition > this.slideWidth / 2) arrayIndex = 1
+        // if (this.currentSlidePosition > this.slideWidth + (this.slideWidth / 2)) arrayIndex = 2
+        for (let i = 0; i < lengthArray.length; i++) {
+            if (
+                this.currentSlidePosition >
+                lengthArray[i] + this.slideWidth / 2
+            ) {
+                arrayIndex = i + 1;
+            }
+            if (this.currentSlidePosition <= 0) {
+                arrayIndex = 0;
+            }
+            if (this.currentSlidePosition + this.slideWidth > this.totalWidth) {
+                arrayIndex = this.items.length - 1;
             }
         }
-        this.doubleTap = new Date().getTime()
-    }
+        console.log(arrayIndex);
+        this.currentSlidePosition = this.slideWidth * arrayIndex;
+        this.wrap.style.transform = `translateX(-${this.currentSlidePosition}px)`;
+    };
     slideLeft = () => {
         this.currentSlidePosition -= this.slideWidth;
         this.wrap.style.transform = `translateX(-${this.currentSlidePosition}px)`;
@@ -163,10 +234,9 @@ class ZoomSlider {
     };
     init() {
         this.items.forEach((item) => {
-            item.addEventListener("mouseover", this.zoomEnter)
-            item.addEventListener("touchstart", this.touchZoom)
-        }
-        );
+            item.addEventListener("mouseover", this.zoomEnter);
+            item.addEventListener("touchstart", this.touchZoom);
+        });
         this.preview.items.forEach((item) => {
             item.addEventListener("click", this.previewControl);
         });
@@ -229,8 +299,6 @@ class CollapseBox {
 const collapseBoxes = document.querySelectorAll(".collapse-box");
 for (const el of collapseBoxes) new CollapseBox(el);
 
-
-
 // Rewrite
 
 var filters = {
@@ -243,7 +311,7 @@ var filters = {
         quantity: document.querySelectorAll(".prod-input"),
         index: {
             items: document.querySelector(".cart-index"),
-            total: document.querySelector(".total-index")
+            total: document.querySelector(".total-index"),
         },
         warn: document.querySelector(".tab-filter__alert"),
         warnButton: document.querySelector(".tab-filter__alert .button"),
@@ -251,7 +319,7 @@ var filters = {
         calls: document.querySelectorAll("[data-filter-call]"),
         tip: document.querySelector(".tab-filter__bar .tooltip"),
         cartBtn: document.querySelector(".cart__btn"),
-        cartWrap: document.querySelector(".tab-filter__cart")
+        cartWrap: document.querySelector(".tab-filter__cart"),
     },
     alert: function alert() {
         var els, ind, hidden, warn, i;
@@ -288,12 +356,12 @@ var filters = {
         }
     },
     updateClasses: function updateClasses() {
-        var els = document.querySelectorAll('.tab-filter__item:not(.d-none)');
+        var els = document.querySelectorAll(".tab-filter__item:not(.d-none)");
         for (var i = 0; i < els.length; i++) {
             if (i % 2) {
-                els[i].classList.add('tab-filter__item--odd')
+                els[i].classList.add("tab-filter__item--odd");
             } else {
-                els[i].classList.remove('tab-filter__item--odd')
+                els[i].classList.remove("tab-filter__item--odd");
             }
         }
     },
@@ -315,7 +383,7 @@ var filters = {
         for (i = 0; i < els.length; i++) {
             att = els[i].getAttribute("data-" + type);
 
-            if (att == value || !value || value == 'all') {
+            if (att == value || !value || value == "all") {
                 els[i].classList.remove("d-none");
                 els[i].classList.add("d-flex");
             } else {
@@ -352,7 +420,7 @@ var filters = {
         sortArr = Array.from(els);
 
         var order = function order(_order) {
-            sortArr.sort(function(a, b) {
+            sortArr.sort(function (a, b) {
                 attA = parseInt(a.getAttribute("data-" + type));
                 attB = parseInt(b.getAttribute("data-" + type));
 
@@ -437,13 +505,13 @@ var filters = {
 
             var remove = function remove() {
                 elements[i].classList.add("tooltip--fixed");
-                setTimeout(function() {
+                setTimeout(function () {
                     elements[i].parentElement.removeChild(elements[i]);
                     for (j = 0; j < triggers.length; j++) {
                         triggers[j].removeEventListener("click", remove);
                     }
                 }, time);
-            }
+            };
             for (k = 0; k < triggers.length; k++) {
                 triggers[k].addEventListener("click", remove);
             }
@@ -457,7 +525,7 @@ var filters = {
         inps = filters.DOM.quantity;
         print = {
             items: filters.DOM.index.items,
-            total: filters.DOM.index.total
+            total: filters.DOM.index.total,
         };
 
         for (i = 0; i < inps.length; i++) {
@@ -484,41 +552,43 @@ var filters = {
         }
     },
     removeCartMessageTimer: undefined,
-    addCartMessage: function() {
+    addCartMessage: function () {
         // alert('Please select a quantity to add an item to the cart');
         var transition = 200;
 
-        notice = document.querySelector('.cart__notice');
+        notice = document.querySelector(".cart__notice");
         if (!notice) {
-            var notice = '<div class="p-4 background-red colour-white font-weight-5 shadow cart__notice" style="transition: ' + transition + 'ms">Please select a quantity to add to cart</div>';
-            filters.DOM.cartWrap.insertAdjacentHTML('afterbegin', notice);
-            notice = document.querySelector('.cart__notice');
+            var notice =
+                '<div class="p-4 background-red colour-white font-weight-5 shadow cart__notice" style="transition: ' +
+                transition +
+                'ms">Please select a quantity to add to cart</div>';
+            filters.DOM.cartWrap.insertAdjacentHTML("afterbegin", notice);
+            notice = document.querySelector(".cart__notice");
         }
 
         clearTimeout(filters.removeCartMessageTimer);
 
-        requestAnimationFrame(function() {
-            notice.classList.add('cart__notice--show');
+        requestAnimationFrame(function () {
+            notice.classList.add("cart__notice--show");
         });
 
-        filters.removeCartMessageTimer = setTimeout(function() {
-            notice.classList.remove('cart__notice--show');
-        }, 3500)
-
+        filters.removeCartMessageTimer = setTimeout(function () {
+            notice.classList.remove("cart__notice--show");
+        }, 3500);
     },
-    inputHighlight: function() {
+    inputHighlight: function () {
         var inputs = filters.DOM.quantity;
         for (var i = 0; i < inputs.length; i++) {
-            inputs[i].classList.add('prod-input--glow');
+            inputs[i].classList.add("prod-input--glow");
         }
-        setTimeout(function() {
+        setTimeout(function () {
             filters.removeInputHighlight();
-        }, 1000)
+        }, 1000);
     },
-    removeInputHighlight: function() {
+    removeInputHighlight: function () {
         var inputs = filters.DOM.quantity;
         for (var i = 0; i < inputs.length; i++) {
-            inputs[i].classList.remove('prod-input--glow');
+            inputs[i].classList.remove("prod-input--glow");
         }
     },
     cartPrevent: function cartPrevent(event) {
@@ -529,17 +599,18 @@ var filters = {
     },
     lockCart: function lockCart() {
         var button = this.DOM.cartBtn;
-        button.classList.add('cart__btn--locked');
-        button.addEventListener('click', this.cartPrevent, true);
+        button.classList.add("cart__btn--locked");
+        button.addEventListener("click", this.cartPrevent, true);
     },
     unlockCart: function unlockCart() {
         var button = this.DOM.cartBtn;
-        button.classList.remove('cart__btn--locked');
-        button.removeEventListener('click', this.cartPrevent, true);
+        button.classList.remove("cart__btn--locked");
+        button.removeEventListener("click", this.cartPrevent, true);
     },
     typeRules: function typeRules(e) {
         // prevents incorrect keys being entered
-        if (!(
+        if (
+            !(
                 (e.keyCode > 95 && e.keyCode < 106) ||
                 (e.keyCode > 47 && e.keyCode < 58) ||
                 (e.keyCode >= 37 && e.keyCode <= 40) ||
@@ -547,7 +618,8 @@ var filters = {
                 e.keyCode == 46 ||
                 e.keyCode == 13 ||
                 e.keyCode == 9
-            )) {
+            )
+        ) {
             e.preventDefault();
             return false;
         }
@@ -559,12 +631,14 @@ var filters = {
     },
     setFilter: function setFilter() {
         var session, target, defFilt, tabs;
-        defFilt = this.DOM.bar.getAttribute('data-default-filter');
+        defFilt = this.DOM.bar.getAttribute("data-default-filter");
         tabs = this.DOM.tabs;
 
         target = tabs[0];
         if (defFilt) {
-            target = this.DOM.bar.querySelector('[data-value="' + defFilt + '"]');
+            target = this.DOM.bar.querySelector(
+                '[data-value="' + defFilt + '"]'
+            );
 
             if (!target) target = tabs[0];
         }
@@ -582,21 +656,24 @@ var filters = {
         }
     },
     events: function events() {
-        var lastFilter = this.DOM.tabs[this.DOM.tabs.length - 1]
+        var lastFilter = this.DOM.tabs[this.DOM.tabs.length - 1];
         this.eventLoop(this.DOM.tabs, "click", this.filter);
         this.eventLoop(this.DOM.quantity, "keyup", this.cart);
         this.eventLoop(this.DOM.quantity, "change", this.cart);
         this.eventLoop(this.DOM.quantity, "keydown", this.typeRules);
         this.eventLoop(this.DOM.sort, "click", this.sort);
         this.eventLoop(this.DOM.calls, "click", this.filterCall);
-        this.DOM.warnButton.addEventListener("click", this.filter.bind(lastFilter, lastFilter));
+        this.DOM.warnButton.addEventListener(
+            "click",
+            this.filter.bind(lastFilter, lastFilter)
+        );
     },
     init: function init() {
         this.events();
         this.setFilter();
         this.tipTrigger();
         this.cart();
-    }
+    },
 };
 filters.init();
 
@@ -621,16 +698,16 @@ var sticky = function sticky(con, el, topgap, wait) {
         view = {
             height: window.innerHeight,
             bottom: window.pageYOffset + window.innerHeight,
-            top: window.pageYOffset
+            top: window.pageYOffset,
         };
         elem = {
             height: stick.offsetHeight,
             bottom: window.pageYOffset + stickRect.bottom,
-            top: stickRect.top
+            top: stickRect.top,
         };
         container = {
             bottom: window.pageYOffset + wrapRect.bottom,
-            top: wrapRect.top
+            top: wrapRect.top,
         };
         dist = container.bottom - view.bottom;
         if (window.innerWidth < 767) dist = 0;
@@ -652,9 +729,8 @@ var sticky = function sticky(con, el, topgap, wait) {
     if (wait) {
         document.addEventListener("scroll", throttle(stickEl, wait));
     } else {
-
         var animFrameStick = function animFrameStick() {
-            window.requestAnimationFrame(function() {
+            window.requestAnimationFrame(function () {
                 stickEl();
             });
         };
