@@ -12,8 +12,8 @@ The slider can be assigned to a variable to access later, for example if you wan
 
 A configuration object can be passed as the second argument.
 To have the script build the preview for you pass `{buildImagePreviews: true}` in the config object.
-Pass an array of image urls to `{previewImages: [URLS]}` as an additional option to manually overide all preview images.
-The default action of `buildPreviewImages` is to create them from the current image urls using cloudinary image pararmeters to reduce the image size.
+Pass an array of image urls to `{previewImages: [URLS]}` as an additional option to manually override all preview images.
+The default action of `buildPreviewImages` is to create them from the current image urls using cloudinary image pararmeters to reduce the image size. If the images do not use cloudinary links, one of the manual options will need to be used, either by hard coding the preview markup, or by passing an array of urls to `{previewImages: []}`.
 
 
 ## Collapse box

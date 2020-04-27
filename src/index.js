@@ -217,8 +217,11 @@ class ZoomSlider {
         let images = this.config.previewImages || currentImages;
         const imageString = images.map((img, index) => {
             // TODO: split string and alter width cloudinary pararmenter
+            if (!this.config.previewImages) {
+                img = img.split('upload').join('upload/w_103,h_103,c_fill,f_auto/')
+            }
             return `<div class="zoom-slider__preview__item" data-slider-preview="${index}">
-                        <img src="${img}" alt="preview image">
+                        <img src="${img}" alt="Image preview">
                     </div>`;
         }).join('');
         previewMarkup += (imageString + "</div>");
