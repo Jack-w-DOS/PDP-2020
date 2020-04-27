@@ -14,7 +14,7 @@ const zoomSlider = new ZoomSlider(".zoom-slider", {
 const collapseBoxes = document.querySelectorAll(".collapse-box");
 for (const el of collapseBoxes) new CollapseBox(el);
 
-new Reviews('WS-WO-AWAL20')
+new Reviews('WS-WO-OAK-UK-RANGE')
 
 filters.init();
 
