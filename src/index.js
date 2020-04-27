@@ -1,7 +1,7 @@
 import "./style.css";
 
 class ZoomSlider {
-    constructor(sliderSelector) {
+    constructor(sliderSelector, config) {
         this.slider = document.querySelector(sliderSelector);
         this.main = this.slider.querySelector(".zoom-slider__main");
         this.wrap = this.slider.querySelector(".zoom-slider__wrap");
@@ -29,14 +29,13 @@ class ZoomSlider {
         this.touch = {
             start: null,
             move: null,
-            end: null,
             dist: null,
         };
+        this.config = config;
         this.init();
     }
     zoomEnter = () => {
         const el = event.currentTarget;
-        console.log(event);
         el.addEventListener("mouseleave", this.zoomLeave.bind(this, el));
         el.addEventListener("mousemove", this.zoomMove.bind(this, el));
         //Set the dimentions of the currently hovered item for use in transforms
@@ -47,15 +46,11 @@ class ZoomSlider {
         this.zoomed = true;
     };
     zoomMove = (el) => {
-        console.log("zoomMove", this.zoomed);
-        console.log(this);
-        console.log(el);
         if (!this.zoomed) return;
         let rect = el.getBoundingClientRect();
-        console.log(event);
         const position = {
-            x: event.pageX || event.touches[0].clientX - rect.left,
-            y: event.pageY || event.touches[0].clientY - rect.top,
+            x: (event.pageX || event.touches[0].clientX) - rect.left,
+            y: (event.pageY || event.touches[0].clientY) - rect.top,
         };
         // Convert position to a percentage to be used in transform
         const percentage = {
@@ -118,10 +113,8 @@ class ZoomSlider {
         }
         el.addEventListener("touchend", this.touchEnd);
         this.doubleTap = new Date().getTime();
-        console.log("touchzoom");
     };
     touchMove = () => {
-        console.log("touch move");
         this.touch.move = event.touches[0].clientX;
         this.touch.dist = this.touch.start - this.touch.move;
 
@@ -130,25 +123,16 @@ class ZoomSlider {
         }px)`;
     };
     touchEnd = () => {
-        console.log("touch end");
         // this.touch.end = event.touches[0].clientX;
         this.currentSlidePosition += this.touch.dist;
         this.wrap.style.transition = null;
         this.centerSlide();
     };
     centerSlide = () => {
-        var calc =
-            this.currentSlidePosition -
-            this.slideWidth +
-            this.slideWidth / 2 +
-            this.slideWidth / 1;
-        const needle = this.currentSlidePosition;
         const lengthArray = Array.from(this.items).map(
             (item, i) => this.slideWidth * i
         );
         let arrayIndex = 0;
-        // if (this.currentSlidePosition > this.slideWidth / 2) arrayIndex = 1
-        // if (this.currentSlidePosition > this.slideWidth + (this.slideWidth / 2)) arrayIndex = 2
         for (let i = 0; i < lengthArray.length; i++) {
             if (
                 this.currentSlidePosition >
@@ -163,9 +147,10 @@ class ZoomSlider {
                 arrayIndex = this.items.length - 1;
             }
         }
-        console.log(arrayIndex);
         this.currentSlidePosition = this.slideWidth * arrayIndex;
+        this.activeSlide = arrayIndex;
         this.wrap.style.transform = `translateX(-${this.currentSlidePosition}px)`;
+        this.updateUI();
     };
     slideLeft = () => {
         this.currentSlidePosition -= this.slideWidth;
@@ -210,8 +195,44 @@ class ZoomSlider {
         );
         this.control.left.addEventListener("click", this.slideLeft);
         this.control.right.addEventListener("click", this.slideRight);
+        this.createPreviewControls();
         this.updateUI();
     };
+    createPreviewControls() {
+        // Check if manual preview exists or if config isn't set to true
+        if (this.preview.wrap) {
+            return
+        }
+        if (!this.config.buildImagePreview) return
+        // Create preview markup
+        let previewMarkup = '<div class="zoom-slider__preview">';
+        let currentImages = Array.from(this.items).map((item) => {
+            return (
+                item.querySelector("img").getAttribute("srcset") ||
+                item.querySelector("img").getAttribute("src") ||
+                item.querySelector("img").getAttribute("data-srcset") ||
+                item.querySelector("img").getAttribute("data-src")
+            );
+        });
+        let images = this.config.previewImages || currentImages;
+        const imageString = images.map((img, index) => {
+            // TODO: split string and alter width cloudinary pararmenter
+            return `<div class="zoom-slider__preview__item" data-slider-preview="${index}">
+                        <img src="${img}" alt="preview image">
+                    </div>`;
+        }).join('');
+        previewMarkup += (imageString + "</div>");
+        // Add markup to DOM
+        this.slider.insertAdjacentHTML('beforeend', previewMarkup)
+        this.preview = {
+            wrap: this.slider.querySelector(".zoom-slider__preview"),
+            items: this.slider.querySelectorAll(".zoom-slider__preview__item"),
+        };
+        // Add events
+        this.preview.items.forEach((item) => {
+            item.addEventListener("click", this.previewControl);
+        });
+    }
     previewControl = () => {
         const preview = event.currentTarget;
         const previewIndex = parseInt(
@@ -237,16 +258,15 @@ class ZoomSlider {
             item.addEventListener("mouseover", this.zoomEnter);
             item.addEventListener("touchstart", this.touchZoom);
         });
-        this.preview.items.forEach((item) => {
-            item.addEventListener("click", this.previewControl);
-        });
         this.setUI();
         // TODO: add debouce
         window.addEventListener("resize", this.resetValues);
     }
 }
 const mainProductSlider = document.querySelector(".zoom-slider");
-const zoomSlider = new ZoomSlider(".zoom-slider");
+const zoomSlider = new ZoomSlider(".zoom-slider", {
+    buildImagePreview: true,
+});
 
 class CollapseBox {
     constructor(element, boxname) {
