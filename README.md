@@ -25,3 +25,13 @@ for (const el of collapseBoxes) new CollapseBox(el);
 To set the default state of any collapse box, add `data-open` to the element:
 `<div class="collapse-box my-2" data-open id="product-description">...`
 The default state is closed but adding this will open the box on load.
+
+## Reviews
+Reviews are initialized by passing the product number as the first parameter:
+```js
+new Reviews('WS-WO-OAK-UK-RANGE')
+```
+There is an optional second parameter which takes the locations as arguments, two css selectors, one for the head and one for the main area.
+```js
+new Reviews('WS-WO-OAK-UK-RANGE', {head: '.review-head', main: '.reviews-main'})
+```

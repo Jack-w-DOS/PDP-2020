@@ -84,7 +84,8 @@ class ZoomSlider {
         this.zoomItem.classList.add("zoom-slider__item__zoom--active");
     };
     hideZoomItem = () => {
-        this.zoomItem.classList.remove("zoom-slider__item__zoom--active");
+        this.zoomItem && this.zoomItem.classList.remove("zoom-slider__item__zoom--active");
+        this.zoomed = false
     };
     touchZoom = () => {
         event.preventDefault();
@@ -151,12 +152,14 @@ class ZoomSlider {
         this.updateUI();
     };
     slideLeft = () => {
+        this.hideZoomItem()
         this.currentSlidePosition -= this.slideWidth;
         this.wrap.style.transform = `translateX(-${this.currentSlidePosition}px)`;
         this.activeSlide -= 1;
         this.updateUI();
     };
     slideRight = () => {
+        this.hideZoomItem()
         this.currentSlidePosition += this.slideWidth;
         this.wrap.style.transform = `translateX(-${this.currentSlidePosition}px)`;
         this.activeSlide += 1;
