@@ -27,7 +27,7 @@ class Reviews {
                 this.setPagesUI();
             })
             .catch((e) => {
-                alert(e);
+                // console.error(e);
             });
     };
     getSummary = () => {
@@ -75,7 +75,6 @@ class Reviews {
         const reviews = this.reviewsData.reviews;
         let reviewsMarkup = '';
         for (const review of reviews) {
-            console.log(review);
             const name = review.customer
                 ? review.customer.display_name
                 : "Trusted Customer";
@@ -151,27 +150,34 @@ class Reviews {
         // Add left control arrow
         pagination.appendChild(leftControl);
         // Are total pages greater than 7
+        const show = 5
         if (totalPages <= 7) {
             for (let block of indexArray) pagination.appendChild(block);
         } else {
-            let diff = Math.abs(1 - this.pageNumber)
-            if (diff > 2) {
-                diff = 2
+            let startDiff = parseInt(this.pageNumber - 1);
+            let endDiff = parseInt(totalPages - this.pageNumber)
+            if (startDiff > 2) startDiff = 2
+            if (endDiff > 2) endDiff = 2
+            // Add one and ellipsis if page number is greater than show numbers (5)
+            if (this.pageNumber >=  (show)) {
                 pagination.appendChild(createEl("div","reviews__pages__block reviews__pages__block--index",{ name: "data-index", value: 1 },1))
                 pagination.appendChild(ellipsis.cloneNode(true))
-            } 
-            for (let i = this.pageNumber - diff; i < this.pageNumber + (5 - diff); i++) {
-                console.log(i, totalPages)
-                if (i === totalPages) {
-                    break;
-                }
-                pagination.appendChild(createEl("div","reviews__pages__block reviews__pages__block--index",{ name: "data-index", value: i },i))
             }
-            // } else {
-
-            // }
-            pagination.appendChild(ellipsis)
-            pagination.appendChild(createEl("div","reviews__pages__block reviews__pages__block--index",{ name: "data-index", value: totalPages }, totalPages))
+            if (this.pageNumber + show <= totalPages) {
+                for (let i = this.pageNumber - startDiff; i < this.pageNumber + (show - startDiff); i++) {
+                    // Add 5 numbers with the focus in the middle (is page no > 2)
+                    pagination.appendChild(createEl("div","reviews__pages__block reviews__pages__block--index",{ name: "data-index", value: i },i))
+                }
+            } else {
+                for (let i = this.pageNumber - (show - endDiff - 1); i <= this.pageNumber + (show - endDiff - 1) && i <= totalPages; i++) {
+                    pagination.appendChild(createEl("div","reviews__pages__block reviews__pages__block--index",{ name: "data-index", value: i },i))
+                } 
+            }
+            // Add ellipsis and final number if page number is less than final number - show numbers
+            if (this.pageNumber + show - 1 <= totalPages) {
+                pagination.appendChild(ellipsis)
+                pagination.appendChild(createEl("div","reviews__pages__block reviews__pages__block--index",{ name: "data-index", value: totalPages }, totalPages))
+            }
         }
         // Add right control arrow
         pagination.appendChild(rightControl);
@@ -215,8 +221,10 @@ class Reviews {
         currentPageBlock.classList.add('reviews__pages__block--active')
         if (this.pageNumber == 1) {
             this.pagination.control.left.classList.add('reviews__pages__block--inactive')
+            this.pagination.control.right.addEventListener('click', this.nextPage)
         } else if (this.pageNumber == this.reviewsData.summary.meta.pages) {
             this.pagination.control.right.classList.add('reviews__pages__block--inactive')
+            this.pagination.control.left.addEventListener('click', this.previousPage)
         } else {
             this.pagination.control.right.addEventListener('click', this.nextPage)
             this.pagination.control.left.addEventListener('click', this.previousPage)
