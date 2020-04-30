@@ -46,16 +46,18 @@ class ZoomSlider {
     zoomMove = (el) => {
         if (!this.zoomed) return;
         let rect = el.getBoundingClientRect();
+        console.log(rect)
         const position = {
-            x: (event.pageX || event.touches[0].clientX) - rect.left,
-            y: (event.pageY || event.touches[0].clientY) - rect.top,
+            x: (event.pageX || event.touches[0].pageX) - window.scrollX - rect.left,
+            y: (event.pageY || event.touches[0].pageY) - (window.scrollY + rect.top),
         };
+        console.log(event)
         // Convert position to a percentage to be used in transform
         const percentage = {
             x: ((position.x / this.currentItemSize.width) * 100).toFixed(2) - 0,
             y:
-                ((position.y / this.currentItemSize.height) * 100).toFixed(2) -
-                0,
+            ((position.y / this.currentItemSize.height) * 100).toFixed(2) -
+            0,
         };
         this.zoomItem.style.transform = `translate(${-percentage.x / 2}%, ${
             -percentage.y / 2
