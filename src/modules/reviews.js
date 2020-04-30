@@ -52,7 +52,8 @@ class Reviews {
     };
     getStars = (rating) => {
         const starWrapper = document.createElement("div");
-        starWrapper.className = "review-stars-wrapper";
+        starWrapper.className = "review-star-wrapper";
+        starWrapper.innerHTML = `<div class="reviews-star-wrapper__cover" style="width:${(5 - rating) * 20}%"></div>`;
         // starWrapper.innerHTML += `<div class="review-stars-wrapper__cover" style="width:${(5 - this.summaryData.rating.rating) * 2 * 20}%"></div>`
         const starMarkup = `<svg class="review-star" xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 9.4 9.4">
                 <g transform="translate(-70.6 -160.6)">
@@ -60,16 +61,16 @@ class Reviews {
                 </g>
             </svg>`;
         for (let i = 0; i < 5; i++) {
-            if (rating > i + 0.75) {
+            // if (rating > i + 0.75) {
                 // Add whole star
                 starWrapper.innerHTML += starMarkup;
-            } else if (rating > i + 0.25) {
-                // Add half star
-                starWrapper.innerHTML += "half";
-            } else {
-                // Add grey star
-                starWrapper.innerHTML += "empty";
-            }
+            // } else if (rating > i + 0.25) {
+            //     // Add half star
+            //     starWrapper.innerHTML += "half";
+            // } else {
+            //     // Add grey star
+            //     starWrapper.innerHTML += "empty";
+            // }
         }
         return starWrapper;
     };
@@ -89,7 +90,7 @@ class Reviews {
 
             this.parseDate(date)
             reviewsMarkup += `<div class="review-card card p-4 my-2" data-review="${id}">
-                <a href="${url}">
+                <a href="${url}" target="_blank">
                     <div class="row-bs">
                         <div class="col-md-3 col-xl-2 d-flex flex-wrap align-content-center">
                             <div class="review-card__name font-weight-6 w-100">${name}</div>
@@ -97,7 +98,7 @@ class Reviews {
                         </div>
                         <div class="col-md-9 col-xl-10">
                             <div class="review-card__stars">${
-                                this.getStars(rating).innerHTML
+                                this.getStars(rating).outerHTML
                             }</div>
                             <div class="review-card__product font-14 colour-grey3">${product}</div>
                             ${

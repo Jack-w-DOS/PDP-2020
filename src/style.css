@@ -249,13 +249,12 @@
                     filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.2));
                 }
                 
-                .review-stars-wrapper {
+                .review-star-wrapper {
                     position: relative;
+                    display: inline-block;
                 }
                 
-                .review-stars-wrapper__cover {
-                    content: '';
-                    display: block;
+                .reviews-star-wrapper__cover {
                     position: absolute;
                     top: 0;
                     right: 0;
