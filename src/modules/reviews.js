@@ -1,7 +1,7 @@
 class Reviews {
     constructor(
         productNumber,
-        locations = { head: ".reviews-head", main: ".reviews-main" }
+        locations = { head: ".reviews-head", main: ".reviews__main", summary: ".reviews__summary" }
     ) {
         (this.productNumber = productNumber), (this.pageSize = 5);
         this.pageNumber = 1;
@@ -9,6 +9,7 @@ class Reviews {
         this.locations = {
             head: document.querySelector(locations.head),
             main: document.querySelector(locations.main),
+            summary: document.querySelector(locations.summary),
         };
         this.paginationIndexCount = window.innerWidth < 768 ? 3 : 5;
         this.paginationShowAllPageSize
@@ -39,9 +40,18 @@ class Reviews {
             .then((response) => response.json())
             .then((data) => {
                 this.summaryData = data;
-                this.setHead();
+                this.setStatic()
             });
-    };
+        };
+    setStatic = () => {
+        // Set page info that does not change
+        this.setHead();    
+        const banner = document.querySelector('.reviews__banner')
+        banner.insertAdjacentElement('beforeend', this.getStars(this.summaryData.rating.rating, 'review-star-wrapper--banner', '#f5f3f2'))
+
+        this.locations.summary.innerHTML += `${this.getStars(this.summaryData.rating.rating).outerHTML}`
+        this.locations.summary.innerHTML += `<div class="font-14 colour-grey4">Rated ${this.summaryData.rating.rating} / 5 Based on ${this.summaryData.meta.count} reviews</div>`
+    }
     setHead = () => {
         const headString = `<div class="reviews-head__index col-md-auto col-md px-0 font-12 font-md-15 colour-grey3">(${this.summaryData.meta.count} customer reviews)</div>`;
         this.locations.head.insertAdjacentElement(
@@ -50,11 +60,10 @@ class Reviews {
         );
         this.locations.head.innerHTML += headString;
     };
-    getStars = (rating) => {
+    getStars = (rating, modifier, coverBG) => {
         const starWrapper = document.createElement("div");
-        starWrapper.className = "review-star-wrapper";
-        starWrapper.innerHTML = `<div class="reviews-star-wrapper__cover" style="width:${(5 - rating) * 20}%"></div>`;
-        // starWrapper.innerHTML += `<div class="review-stars-wrapper__cover" style="width:${(5 - this.summaryData.rating.rating) * 2 * 20}%"></div>`
+        starWrapper.className = `review-star-wrapper ${modifier ? modifier : ''}`;
+        starWrapper.innerHTML = `<div class="reviews-star-wrapper__cover" style="width:${(5 - rating) * 20}%; ${coverBG ? 'background-color:' + coverBG : ''}"></div>`;
         const starMarkup = `<svg class="review-star" xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 9.4 9.4">
                 <g transform="translate(-70.6 -160.6)">
                     <path d="M5.434,7.794,2.529,9.4,3.084,6,.734,3.59l3.248-.5L5.434,0,6.887,3.094l3.248.5L7.784,6l.555,3.4Z" transform="translate(69.866 160.6)" fill="#f7b538"></path>
@@ -89,21 +98,21 @@ class Reviews {
             const comment = review.products[0].review;
 
             this.parseDate(date)
-            reviewsMarkup += `<div class="review-card card p-4 my-2" data-review="${id}">
+            reviewsMarkup += `<div class="reviews-card card p-4 my-2" data-review="${id}">
                 <a href="${url}" target="_blank">
                     <div class="row-bs">
                         <div class="col-md-3 col-xl-2 d-flex flex-wrap align-content-center">
-                            <div class="review-card__name font-weight-6 w-100">${name}</div>
-                            <div class="review-card__time colour-grey3">${this.parseDate(date)}</div>
+                            <div class="reviews-card__name font-weight-6 w-100">${name}</div>
+                            <div class="reviews-card__time colour-grey3">${this.parseDate(date)}</div>
                         </div>
                         <div class="col-md-9 col-xl-10">
-                            <div class="review-card__stars">${
+                            <div class="reviews-card__stars">${
                                 this.getStars(rating).outerHTML
                             }</div>
-                            <div class="review-card__product font-14 colour-grey3">${product}</div>
+                            <div class="reviews-card__product font-14 colour-grey3">${product}</div>
                             ${
                                 comment
-                                    ? '<div class="review-card__comment">' +
+                                    ? '<div class="reviews-card__comment">' +
                                       comment +
                                       "</div>"
                                     : ""
@@ -184,11 +193,6 @@ class Reviews {
             let endDiff = parseInt(totalPages - this.pageNumber)
             if (startDiff > diffMax) startDiff = diffMax
             if (endDiff > diffMax) endDiff = diffMax
-            console.log({
-                start: startDiff,
-                end: endDiff,
-                diffMax: diffMax
-            })
             // Add one and ellipsis if page number is greater than this.paginationIndexCount number
             if (this.pageNumber - startDiff > 1) {
                 pagination.appendChild(createEl("div","reviews__pages__block reviews__pages__block--index",{ name: "data-index", value: 1 },1))
@@ -230,10 +234,10 @@ class Reviews {
         this.getReviews()
     }
     showLoading = () => {
-        this.locations.main.classList.add('reviews-main--loading')
+        this.locations.main.classList.add('reviews__main--loading')
     }
     hideLoading = () => {
-        this.locations.main.classList.remove('reviews-main--loading')
+        this.locations.main.classList.remove('reviews__main--loading')
     }
     previousPage = () => {
         this.pageNumber -= 1;

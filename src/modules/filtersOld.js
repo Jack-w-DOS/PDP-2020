@@ -5,7 +5,7 @@ var filters = {
         sort: document.querySelectorAll(".tab-filter__col"),
         container: document.querySelector(".tab-filter__wrap"),
         items: document.querySelectorAll(".tab-filter__item"),
-        quantity: document.querySelectorAll(".prod-input"),
+        quantity: document.querySelectorAll(".increment-input__input"),
         index: {
             items: document.querySelector(".cart-index"),
             total: document.querySelector(".total-index"),
@@ -25,7 +25,7 @@ var filters = {
 
         for (i = 0; i < els.length; i++) {
             if (els[i].classList.contains("d-none")) {
-                ind = parseInt(els[i].querySelector(".prod-input").value, 10);
+                ind = parseInt(els[i].querySelector(".increment-input__input").value, 10);
 
                 if (ind > 0) {
                     hidden += ind;
@@ -226,9 +226,10 @@ var filters = {
         };
 
         for (i = 0; i < inps.length; i++) {
-            parent = inps[i].parentElement.parentElement;
+            parent = inps[i].parentElement.parentElement.parentElement;
             price = parent.getAttribute("data-price");
             value = parseInt(inps[i].value, 10);
+            console.log(inps[i].value)
 
             if (value) {
                 items += value;
@@ -276,7 +277,7 @@ var filters = {
     inputHighlight: function () {
         var inputs = filters.DOM.quantity;
         for (var i = 0; i < inputs.length; i++) {
-            inputs[i].classList.add("prod-input--glow");
+            inputs[i].classList.add("increment-input__input--glow");
         }
         setTimeout(function () {
             filters.removeInputHighlight();
@@ -285,7 +286,7 @@ var filters = {
     removeInputHighlight: function () {
         var inputs = filters.DOM.quantity;
         for (var i = 0; i < inputs.length; i++) {
-            inputs[i].classList.remove("prod-input--glow");
+            inputs[i].classList.remove("increment-input__input--glow");
         }
     },
     cartPrevent: function cartPrevent(event) {

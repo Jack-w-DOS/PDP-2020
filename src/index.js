@@ -1,8 +1,9 @@
 import CollapseBox from './modules/collapseBox'
 import ZoomSlider from './modules/slider'
-import filters from './modules/filters'
+import ProductFilters from './modules/productFilters'
 import sticky from './modules/sticky'
 import Reviews from './modules/reviews'
+// import FormControl from './modules/formControl'
 
 import "./style.css";
 
@@ -16,6 +17,9 @@ for (const el of collapseBoxes) new CollapseBox(el);
 
 new Reviews('WS-WO-OAK-UK-RANGE')
 
-filters.init();
-
 sticky(".tab-filter", ".tab-filter__cart", 155);
+
+// const formInputs = document.querySelectorAll('.increment-input')
+// for (const el of formInputs) new FormControl(el)
+
+new ProductFilters('.tab-filter')
