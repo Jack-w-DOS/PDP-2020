@@ -35,3 +35,15 @@ There is an optional second parameter which takes the locations as arguments, tw
 ```js
 new Reviews('WS-WO-OAK-UK-RANGE', {head: '.review-head', main: '.reviews-main'})
 ```
+
+
+## Filters
+Products can be filters by specified options, usually various thicknesses, accessories or all. All shown products can be sorted in and ascending or descending fashion.
+
+Default filter can be set by initializing the filters with a specific filter number:
+```js
+new ProductFilters('.tab-filter', 1)
+```
+Note: the default filter is zero indexed, so `0` will trigger the first filter.
+
+Sorting on load can be done through URL parameters. The URL '...?filter=accessories&sort=price&order=asc' will show all accessories, with a descending price sort.
