@@ -46,4 +46,4 @@ new ProductFilters('.tab-filter', 1)
 ```
 Note: the default filter is zero indexed, so `0` will trigger the first filter.
 
-Sorting on load can be done through URL parameters. The URL '...?filter=accessories&sort=price&order=asc' will show all accessories, with a descending price sort.
+Sorting on load can be done through URL parameters. The URL `...?filter=accessories&sort=price&order=asc` will show all accessories, with a descending price sort.

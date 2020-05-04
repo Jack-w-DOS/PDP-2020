@@ -3,9 +3,11 @@ import ZoomSlider from './modules/slider'
 import ProductFilters from './modules/productFilters'
 import sticky from './modules/sticky'
 import Reviews from './modules/reviews'
+import smoothScroll from './modules/smoothScroll'
 // import FormControl from './modules/formControl'
 
 import "./style.css";
+import SmoothScroll from './modules/smoothScroll'
 
 const mainProductSlider = document.querySelector(".zoom-slider");
 const zoomSlider = new ZoomSlider(".zoom-slider", {
@@ -23,3 +25,5 @@ sticky(".tab-filter", ".tab-filter__cart", 155);
 // for (const el of formInputs) new FormControl(el)
 
 new ProductFilters('.tab-filter')
+
+new SmoothScroll()

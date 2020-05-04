@@ -16,6 +16,7 @@ class ProductFilters {
         this.summary = {
             items: document.querySelector(".cart-index"),
             total: document.querySelector(".total-index"),
+            button: document.querySelector('.cart__btn')
         };
         this.sort = {
             type: null,
@@ -99,6 +100,11 @@ class ProductFilters {
     updateSummary = () => {
         this.summary.items.innerText = this.state.items;
         this.summary.total.innerHTML = `&pound;${this.state.price}`;
+        if (this.state.items > 0) {
+            this.summary.button.classList.add('cart__btn--active')
+        } else  {
+            this.summary.button.classList.remove('cart__btn--active')
+        }
     };
     sortItems = (sort) => {
         const lastType = this.sort.type;
@@ -174,6 +180,9 @@ class ProductFilters {
         }
         filter && this.filterItems.call(this, filter)
         sort && this.sortItems.call(this, sort)
+    }
+    preventCart = () => {
+        if (this.state.items <= 0) event.preventDefault()
     }
     init = () => {
         const addEvents = (event, nodes, callback) => {

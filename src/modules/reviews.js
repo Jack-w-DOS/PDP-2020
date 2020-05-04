@@ -1,7 +1,7 @@
 class Reviews {
     constructor(
         productNumber,
-        locations = { head: ".reviews-head", main: ".reviews__main", summary: ".reviews__summary" }
+        locations = { head: ".reviews-head", main: ".reviews__main", summary: ".reviews__summary", box: "#product-reviews" }
     ) {
         (this.productNumber = productNumber), (this.pageSize = 5);
         this.pageNumber = 1;
@@ -10,6 +10,7 @@ class Reviews {
             head: document.querySelector(locations.head),
             main: document.querySelector(locations.main),
             summary: document.querySelector(locations.summary),
+            box: document.querySelector(locations.box)
         };
         this.paginationIndexCount = window.innerWidth < 768 ? 3 : 5;
         this.paginationShowAllPageSize
@@ -25,6 +26,7 @@ class Reviews {
             })
             .then((data) => {
                 this.reviewsData = data;
+                if (!data.reviews.length) return this.removeReviews()
                 this.hideLoading()
                 this.setMain();
                 this.setPagesUI();
@@ -39,6 +41,8 @@ class Reviews {
         )
             .then((response) => response.json())
             .then((data) => {
+                console.log(data)
+                if (!data.meta.count) return false
                 this.summaryData = data;
                 this.setStatic()
             });
@@ -53,7 +57,8 @@ class Reviews {
         this.locations.summary.innerHTML += `<div class="font-14 colour-grey4">Rated ${this.summaryData.rating.rating} / 5 Based on ${this.summaryData.meta.count} reviews</div>`
     }
     setHead = () => {
-        const headString = `<div class="reviews-head__index col-md-auto col-md px-0 font-12 font-md-15 colour-grey3">(${this.summaryData.meta.count} customer reviews)</div>`;
+        if (this.summaryData.rating.rating < 3) return
+        const headString = `<div class="reviews-head__index col-md-auto col-md px-0 font-12 font-md-15 underline colour-grey3">(${this.summaryData.meta.count} customer reviews)</div>`;
         this.locations.head.insertAdjacentElement(
             "afterbegin",
             this.getStars(this.summaryData.rating.rating)
@@ -183,8 +188,6 @@ class Reviews {
         // Add left control arrow
         pagination.appendChild(leftControl);
         // Are total pages greater than 7
-        // TEMP
-        // this.paginationIndexCount = 3
         if (totalPages <= this.paginationShowAllPageSize) {
             for (let block of indexArray) pagination.appendChild(block);
         } else {
@@ -232,6 +235,7 @@ class Reviews {
         const index = event.currentTarget.getAttribute('data-index')
         this.pageNumber = parseInt(index);
         this.getReviews()
+        this.scrollToTop()
     }
     showLoading = () => {
         this.locations.main.classList.add('reviews__main--loading')
@@ -242,10 +246,15 @@ class Reviews {
     previousPage = () => {
         this.pageNumber -= 1;
         this.getReviews()
+        this.scrollToTop()
     }
     nextPage = () => {
         this.pageNumber += 1;
         this.getReviews()
+        this.scrollToTop()
+    }
+    scrollToTop = () => {
+        this.locations.box.scrollIntoView(true)
     }
     updatePagesUI = () => {
         const currentPageBlock = this.pagination.main.querySelector(`[data-index="${this.pageNumber}"]`)
@@ -277,9 +286,14 @@ class Reviews {
 
         if (previousIndex !== this.paginationIndexCount) this.getReviews()
     }
+    removeReviews = () => {
+        // Remove reviews from the layout if the AJAX returns nothing or an error.
+        this.locations.box.parentElement.removeChild(this.locations.box)
+    }
     init() {
         this.getSummary();
         this.getReviews();
+        this.resizeUpdates()
         window.addEventListener('resize', this.resizeUpdates)
     }
 }
