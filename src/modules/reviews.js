@@ -13,7 +13,6 @@ class Reviews {
             box: document.querySelector(locations.box)
         };
         this.paginationIndexCount = window.innerWidth < 768 ? 3 : 5;
-        this.paginationShowAllPageSize
         this.init();
     }
     getReviews = () => {
@@ -149,6 +148,7 @@ class Reviews {
         }
     }
     setPagesUI = () => {
+        if (this.reviewsData.summary.meta.pages <= 1) return;
         const totalPages = this.reviewsData.summary.meta.pages;
         const createEl = (type, classNames, att, content) => {
             const el = document.createElement(type);
@@ -188,7 +188,7 @@ class Reviews {
         // Add left control arrow
         pagination.appendChild(leftControl);
         // Are total pages greater than 7
-        if (totalPages <= this.paginationShowAllPageSize) {
+        if (totalPages <= this.pageSize) {
             for (let block of indexArray) pagination.appendChild(block);
         } else {
             const diffMax = Math.floor(this.paginationIndexCount / 2)

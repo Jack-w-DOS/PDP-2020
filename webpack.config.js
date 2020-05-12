@@ -1,5 +1,6 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const path = require("path");
 
 module.exports = {
@@ -8,6 +9,19 @@ module.exports = {
         filename: "[name].bundle.js",
         path: path.resolve(__dirname, "docs"),
     },
+    optimization: {
+        minimizer: [
+            new UglifyJsPlugin({
+              test: /\.js(\?.*)?$/i,
+              exclude: /node_modules/,
+              sourceMap: true,
+              uglifyOptions: {
+                mangle: false,
+                keep_fnames: true
+              },
+            }),
+          ],
+      },
     module: {
         rules: [
             {

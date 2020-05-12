@@ -3,11 +3,10 @@ import ZoomSlider from './modules/slider'
 import ProductFilters from './modules/productFilters'
 import sticky from './modules/sticky'
 import Reviews from './modules/reviews'
-import smoothScroll from './modules/smoothScroll'
+import SmoothScroll from './modules/smoothScroll'
 // import FormControl from './modules/formControl'
 
 import "./style.css";
-import SmoothScroll from './modules/smoothScroll'
 
 const mainProductSlider = document.querySelector(".zoom-slider");
 const zoomSlider = new ZoomSlider(".zoom-slider", {
@@ -17,7 +16,7 @@ const zoomSlider = new ZoomSlider(".zoom-slider", {
 const collapseBoxes = document.querySelectorAll(".collapse-box");
 for (const el of collapseBoxes) new CollapseBox(el);
 
-new Reviews('WS-WO-OAK-UK-RANGE')
+new Reviews('SNK-CR-RE-INSET-1/5-RL301CW')
 
 sticky(".tab-filter", ".tab-filter__cart", 155);
 
