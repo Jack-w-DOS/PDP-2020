@@ -35,6 +35,7 @@ There is an optional second parameter which takes the locations as arguments, tw
 ```js
 new Reviews('WS-WO-OAK-UK-RANGE', {head: '.review-head', main: '.reviews-main'})
 ```
+If reviews are not found or an error occurs, all reviews markup will be removed from the page.
 
 
 ## Filters

@@ -40,7 +40,6 @@ class Reviews {
         )
             .then((response) => response.json())
             .then((data) => {
-                console.log(data)
                 if (!data.meta.count) return false
                 this.summaryData = data;
                 this.setStatic()
@@ -50,41 +49,34 @@ class Reviews {
         // Set page info that does not change
         this.setHead();    
         const banner = document.querySelector('.reviews__banner')
-        banner.insertAdjacentElement('beforeend', this.getStars(this.summaryData.rating.rating, 'review-star-wrapper--banner', '#f5f3f2'))
+        banner.insertAdjacentElement('beforeend', this.getStars(this.summaryData.rating.rating, 21,'review-star-wrapper--banner', '#f5f3f2'))
+        banner.innerHTML += '<img class="d-none d-md-inline" srcset="https://res.cloudinary.com/dy7hqiitw/image/upload/w_60/worktop-express-uk/brands/feefo-logo.png 1x, https://res.cloudinary.com/dy7hqiitw/image/upload/w_120/worktop-express-uk/brands/feefo-logo.png 2x" alt="Feefo logo">';
 
-        this.locations.summary.innerHTML += `${this.getStars(this.summaryData.rating.rating).outerHTML}`
+        this.locations.summary.innerHTML += `${this.getStars(this.summaryData.rating.rating, 27, null, null, '<img class="d-inline-block pl-2" srcset="https://res.cloudinary.com/dy7hqiitw/image/upload/w_60/worktop-express-uk/brands/feefo-logo.png 1x, https://res.cloudinary.com/dy7hqiitw/image/upload/w_120/worktop-express-uk/brands/feefo-logo.png 2x" alt="Feefo logo">').outerHTML}`
         this.locations.summary.innerHTML += `<div class="font-14 colour-grey4">Rated ${this.summaryData.rating.rating} / 5 Based on ${this.summaryData.meta.count} reviews</div>`
     }
     setHead = () => {
         if (this.summaryData.rating.rating < 3) return
-        const headString = `<div class="reviews-head__index col-md-auto col-md px-0 font-12 font-md-15 underline colour-grey3">(${this.summaryData.meta.count} customer reviews)</div>`;
+        const headString = `<div class="reviews-head__index col-md-auto col-md px-0 font-12 font-md-15 underline colour-grey3 pt-1 pt-md-0 pl-md-2">(${this.summaryData.meta.count} customer reviews)</div>`;
         this.locations.head.insertAdjacentElement(
             "afterbegin",
             this.getStars(this.summaryData.rating.rating)
         );
         this.locations.head.innerHTML += headString;
     };
-    getStars = (rating, modifier, coverBG) => {
+    getStars = (rating, size = 21, modifier, coverBG, addMarkup) => {
         const starWrapper = document.createElement("div");
         starWrapper.className = `review-star-wrapper ${modifier ? modifier : ''}`;
         starWrapper.innerHTML = `<div class="reviews-star-wrapper__cover" style="width:${(5 - rating) * 20}%; ${coverBG ? 'background-color:' + coverBG : ''}"></div>`;
-        const starMarkup = `<svg class="review-star" xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 9.4 9.4">
+        const starMarkup = `<svg class="review-star" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 9.4 9.4">
                 <g transform="translate(-70.6 -160.6)">
                     <path d="M5.434,7.794,2.529,9.4,3.084,6,.734,3.59l3.248-.5L5.434,0,6.887,3.094l3.248.5L7.784,6l.555,3.4Z" transform="translate(69.866 160.6)" fill="#f7b538"></path>
                 </g>
             </svg>`;
         for (let i = 0; i < 5; i++) {
-            // if (rating > i + 0.75) {
-                // Add whole star
-                starWrapper.innerHTML += starMarkup;
-            // } else if (rating > i + 0.25) {
-            //     // Add half star
-            //     starWrapper.innerHTML += "half";
-            // } else {
-            //     // Add grey star
-            //     starWrapper.innerHTML += "empty";
-            // }
+            starWrapper.innerHTML += starMarkup;
         }
+        if (addMarkup) starWrapper.innerHTML += addMarkup
         return starWrapper;
     };
     setMain = () => {

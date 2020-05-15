@@ -30,6 +30,7 @@ class ZoomSlider {
             dist: null,
         };
         this.config = config;
+        this.tipActive = true;
         this.init();
     }
     zoomEnter = () => {
@@ -112,6 +113,10 @@ class ZoomSlider {
         }
         el.addEventListener("touchend", this.touchEnd);
         this.doubleTap = new Date().getTime();
+        if (this.tipActive) {
+            this.main.classList.remove('zoom-slider__main--tip');
+            this.tipActive = false;
+        }
     };
     touchMove = () => {
         this.touch.move = event.touches[0].clientX;
