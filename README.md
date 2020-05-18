@@ -48,3 +48,6 @@ new ProductFilters('.tab-filter', 1)
 Note: the default filter is zero indexed, so `0` will trigger the first filter.
 
 Sorting on load can be done through URL parameters. The URL `...?filter=accessories&sort=price&order=asc` will show all accessories, with a descending price sort.
+
+## Compiling script
+Script should be compiled using the [babel online web app](https://babeljs.io/). Each module should be included minus the export code. Compiling through webpack is not possible currently as it requires initialization in order to be consider for compilation. We cannot initialize here as the use cases differ and handled on a case by case basis.
