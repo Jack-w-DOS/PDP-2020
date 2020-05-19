@@ -268,7 +268,10 @@ class ZoomSlider {
             item.addEventListener("touchstart", this.touchZoom);
         });
         this.setUI();
-        // TODO: add debouce
+        // Add double tap to zoom tip if device has touch capabilities
+        if ('ontouchstart' in window || navigator.msMaxTouchPoints) this.main.classList.add('zoom-slider__main--tip');
+
+        // TODO: add debounce
         window.addEventListener("resize", this.resetValues);
     }
 }

@@ -49,5 +49,11 @@ Note: the default filter is zero indexed, so `0` will trigger the first filter.
 
 Sorting on load can be done through URL parameters. The URL `...?filter=accessories&sort=price&order=asc` will show all accessories, with a descending price sort.
 
+## Smooth scrolling
+using data attributes you can attaach a target element using a query selector to an element on the page. using a second attribute you can attach a second selector which will be 'clicked' as part of the scroll so as to 'activate' the element.
+```html
+<div data-scroll="#product-reviews" data-scroll-click="#product-reviews > .collapse-box__head"></div>
+```
+
 ## Compiling script
 Script should be compiled using the [babel online web app](https://babeljs.io/). Each module should be included minus the export code. Compiling through webpack is not possible currently as it requires initialization in order to be consider for compilation. We cannot initialize here as the use cases differ and handled on a case by case basis.
