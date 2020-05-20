@@ -69,7 +69,6 @@ class ZoomSlider {
     zoomLeave = (el) => {
         el.removeEventListener("mousemove", this.zoomMove);
         this.hideZoomItem();
-        this.zoomed = false;
     };
     touchStart = () => {
         event.preventDefault();
@@ -112,7 +111,6 @@ class ZoomSlider {
     };
     hideZoomItem = () => {
         this.zoomItem && this.zoomItem.classList.remove("zoom-slider__item__zoom--active");
-        this.zoomed = false
     };
     slideLeft = () => {
         this.hideZoomItem()
@@ -164,10 +162,7 @@ class ZoomSlider {
     };
     createPreviewControls() {
         // Check if manual preview exists or if config isn't set to true
-        if (this.preview.wrap) {
-            return
-        }
-        if (!this.config.buildImagePreview) return
+        if (this.preview.wrap || !this.config.buildImagePreview) return
         // Create preview markup
         let previewMarkup = '<div class="zoom-slider__preview">';
         let currentImages = Array.from(this.items).map((item) => {
@@ -180,7 +175,7 @@ class ZoomSlider {
         });
         let images = this.config.previewImages || currentImages;
         const imageString = images.map((img, index) => {
-            // TODO: split string and alter width cloudinary pararmenter
+            // TODO: split string and alter width cloudinary pararmeter
             if (!this.config.previewImages) {
                 img = img.split('upload').join('upload/w_103,h_103,c_fill,f_auto/')
             }
