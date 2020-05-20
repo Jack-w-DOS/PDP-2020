@@ -22,8 +22,6 @@ class ZoomSlider {
         this.currentSlidePosition = 0;
         this.zoomItem;
         this.activeSlide = 0;
-        this.doubleTap = false;
-        this.zoomed = false;
         this.touch = {
             start: null,
             move: null,
@@ -37,15 +35,17 @@ class ZoomSlider {
         const el = event.currentTarget;
         el.addEventListener("mouseleave", this.zoomLeave.bind(this, el));
         el.addEventListener("mousemove", this.zoomMove.bind(this, el));
-        //Set the dimentions of the currently hovered item for use in transforms
+        // Set the dimensions of the currently hovered item for use in transforms
         this.currentItemSize.width = el.offsetWidth;
         this.currentItemSize.height = el.offsetHeight;
         this.zoomItem = el.querySelector(".zoom-slider__item__zoom");
+        if (this.tipActive) {
+            this.main.classList.remove('zoom-slider__main--tip');
+            this.tipActive = false;
+        }
         this.showZoomItem();
-        this.zoomed = true;
     };
     zoomMove = (el) => {
-        if (!this.zoomed) return;
         let rect = el.getBoundingClientRect();
         const position = {
             x: (event.pageX || event.touches[0].pageX) - window.scrollX - rect.left,
@@ -58,6 +58,10 @@ class ZoomSlider {
             ((position.y / this.currentItemSize.height) * 100).toFixed(2) -
             0,
         };
+        if (percentage.x > 100) percentage.x = 100;
+        if (percentage.y > 100) percentage.y = 100;
+        if (percentage.x < 0) percentage.x = 0;
+        if (percentage.y < 0) percentage.y = 0;
         this.zoomItem.style.transform = `translate(${-percentage.x / 2}%, ${
             -percentage.y / 2
         }%)`;
@@ -66,6 +70,28 @@ class ZoomSlider {
         el.removeEventListener("mousemove", this.zoomMove);
         this.hideZoomItem();
         this.zoomed = false;
+    };
+    touchStart = () => {
+        event.preventDefault();
+        const el = event.currentTarget;
+        this.currentItemSize.width = el.offsetWidth;
+        this.currentItemSize.height = el.offsetHeight;
+        this.zoomItem = el.querySelector(".zoom-slider__item__zoom");
+        
+        this.showZoomItem();
+        this.zoomMove.call(this, event.target);
+        el.addEventListener("touchmove", this.touchMove);
+        el.addEventListener("touchend", this.touchEnd);
+        if (this.tipActive) {
+            this.main.classList.remove('zoom-slider__main--tip');
+            this.tipActive = false;
+        }
+    };
+    touchMove = () => {
+        this.zoomMove.call(this, event.target);
+    };
+    touchEnd = () => {
+        this.hideZoomItem()
     };
     showZoomItem = () => {
         // Loop through the picture element replacing data-src/set with src/set
@@ -87,74 +113,6 @@ class ZoomSlider {
     hideZoomItem = () => {
         this.zoomItem && this.zoomItem.classList.remove("zoom-slider__item__zoom--active");
         this.zoomed = false
-    };
-    touchZoom = () => {
-        event.preventDefault();
-        const time = new Date().getTime();
-        const timeDiff = time - this.doubleTap;
-        const el = event.currentTarget;
-        this.currentItemSize.width = el.offsetWidth;
-        this.currentItemSize.height = el.offsetHeight;
-        this.touch.start = event.touches[0].clientX;
-        this.zoomItem = el.querySelector(".zoom-slider__item__zoom");
-        // If double taped (two taps under 500ms)
-        if (timeDiff < 500) {
-            // Zoom toggle
-            this.zoomed = !this.zoomed;
-        }
-        el.addEventListener("touchmove", this.touchMove);
-        if (this.zoomed) {
-            el.removeEventListener("touchmove", this.touchMove);
-            this.showZoomItem();
-            this.zoomMove.call(this, event.currentTarget);
-        } else {
-            this.hideZoomItem();
-            this.wrap.style.transition = "none";
-        }
-        el.addEventListener("touchend", this.touchEnd);
-        this.doubleTap = new Date().getTime();
-        if (this.tipActive) {
-            this.main.classList.remove('zoom-slider__main--tip');
-            this.tipActive = false;
-        }
-    };
-    touchMove = () => {
-        this.touch.move = event.touches[0].clientX;
-        this.touch.dist = this.touch.start - this.touch.move;
-
-        this.wrap.style.transform = `translateX(-${
-            this.currentSlidePosition + this.touch.dist
-        }px)`;
-    };
-    touchEnd = () => {
-        // this.touch.end = event.touches[0].clientX;
-        this.currentSlidePosition += this.touch.dist;
-        this.wrap.style.transition = null;
-        this.centerSlide();
-    };
-    centerSlide = () => {
-        const lengthArray = Array.from(this.items).map(
-            (item, i) => this.slideWidth * i
-        );
-        let arrayIndex = 0;
-        for (let i = 0; i < lengthArray.length; i++) {
-            if (
-                this.currentSlidePosition >
-                lengthArray[i] + this.slideWidth / 2
-            ) {
-                arrayIndex = i + 1;
-            }
-            if (this.currentSlidePosition <= 0) {
-                arrayIndex = 0;
-            }
-            if (this.currentSlidePosition + this.slideWidth > this.totalWidth) {
-                arrayIndex = this.items.length - 1;
-            }
-        }
-        this.currentSlidePosition = this.slideWidth * arrayIndex;
-        this.activeSlide = arrayIndex;
-        this.wrap.style.transform = `translateX(-${this.currentSlidePosition}px)`;
-        this.updateUI();
     };
     slideLeft = () => {
         this.hideZoomItem()
@@ -265,11 +223,13 @@ class ZoomSlider {
     init() {
         this.items.forEach((item) => {
             item.addEventListener("mouseover", this.zoomEnter);
-            item.addEventListener("touchstart", this.touchZoom);
+            item.addEventListener("touchstart", this.touchStart);
         });
         this.setUI();
         // Add double tap to zoom tip if device has touch capabilities
-        if ('ontouchstart' in window || navigator.msMaxTouchPoints) this.main.classList.add('zoom-slider__main--tip');
+        if ('ontouchstart' in window || navigator.msMaxTouchPoints) {
+            this.main.classList.add('zoom-slider__main--tip');
+        }
 
         // TODO: add debounce
         window.addEventListener("resize", this.resetValues);
