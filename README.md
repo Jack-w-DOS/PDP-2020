@@ -50,9 +50,15 @@ Note: the default filter is zero indexed, so `0` will trigger the first filter.
 Sorting on load can be done through URL parameters. The URL `...?filter=accessories&sort=price&order=asc` will show all accessories, with a descending price sort.
 
 ## Smooth scrolling
-using data attributes you can attaach a target element using a query selector to an element on the page. using a second attribute you can attach a second selector which will be 'clicked' as part of the scroll so as to 'activate' the element.
+using data attributes you can attach a target element using a query selector to an element on the page. The second element `data-scroll-callback` can be used to trigger a callback on click.
 ```html
-<div data-scroll="#product-reviews" data-scroll-click="#product-reviews > .collapse-box__head"></div>
+<div data-scroll="#product-reviews" data-scroll-callback="
+                    (function () {
+                        var box = document.getElementById('product-reviews');
+                        var head = box.querySelector('.collapse-box__head');
+                        if (box.className.indexOf('--open') === -1) head.click();
+                    })();
+                    "></div>
 ```
 
 ## Compiling script

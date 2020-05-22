@@ -3,9 +3,11 @@ class Reviews {
         productNumber,
         locations = { head: ".reviews-head", main: ".reviews__main", summary: ".reviews__summary", box: "#product-reviews" }
     ) {
-        (this.productNumber = productNumber), (this.pageSize = 5);
+        this.productNumber = productNumber;
+        this.pageSize = window.innerWidth < 768 ? 3 : 5;;
         this.pageNumber = 1;
         this.reviewsData = null;
+        this.mobile = window.innerWidth < 768 ? true : false;
         this.locations = {
             head: document.querySelector(locations.head),
             main: document.querySelector(locations.main),
@@ -65,17 +67,30 @@ class Reviews {
         this.locations.head.innerHTML += headString;
     };
     getStars = (rating, size = 21, modifier, coverBG, addMarkup) => {
-        const starWrapper = document.createElement("div");
-        starWrapper.className = `review-star-wrapper ${modifier ? modifier : ''}`;
-        starWrapper.innerHTML = `<div class="reviews-star-wrapper__cover" style="width:${(5 - rating) * 20}%; ${coverBG ? 'background-color:' + coverBG : ''}"></div>`;
-        const starMarkup = `<svg class="review-star" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 9.4 9.4">
+        const starWrapper = document.createElement("div")
+        starWrapper.classList.add('d-inline-block');
+        const wholeStar = `<svg class="review-star" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 9.4 9.4">
                 <g transform="translate(-70.6 -160.6)">
                     <path d="M5.434,7.794,2.529,9.4,3.084,6,.734,3.59l3.248-.5L5.434,0,6.887,3.094l3.248.5L7.784,6l.555,3.4Z" transform="translate(69.866 160.6)" fill="#f7b538"></path>
                 </g>
             </svg>`;
-        for (let i = 0; i < 5; i++) {
-            starWrapper.innerHTML += starMarkup;
+        const halfStar = `<svg xmlns="http://www.w3.org/2000/svg" width="${size/2}" height="${size}" viewBox="0 0 9.4 19.6">
+                <path id="Path_70" data-name="Path 70" d="M-816.257-323.4v0l1.156-7.09-4.9-5.022,6.772-1.034L-810.2-343v16.252l-6.055,3.347Z" transform="translate(820 343)" fill="#f7b538"/>
+            </svg>
+            `;
+        // Add whole stars
+        for (let i = 0; i < Math.floor(rating); i++) {
+            starWrapper.innerHTML += wholeStar;
         }
+        const decimal = rating - Math.floor(rating)
+        if (decimal >= .25 && decimal < .75) {
+            // Half star
+            starWrapper.innerHTML += halfStar;
+        } else if (decimal < 1 && decimal > 0){
+            // Whole star
+            starWrapper.innerHTML += wholeStar;
+        }
+
         if (addMarkup) starWrapper.innerHTML += addMarkup
         return starWrapper;
     };
@@ -94,28 +109,26 @@ class Reviews {
             const comment = review.products[0].review;
 
             this.parseDate(date)
-            reviewsMarkup += `<div class="reviews-card card p-4 my-2" data-review="${id}">
-                <a href="${url}" target="_blank">
-                    <div class="row-bs">
-                        <div class="col-md-3 col-xl-2 d-flex flex-wrap align-content-center">
-                            <div class="reviews-card__name font-weight-6 w-100">${name}</div>
-                            <div class="reviews-card__time colour-grey3">${this.parseDate(date)}</div>
-                        </div>
-                        <div class="col-md-9 col-xl-10">
-                            <div class="reviews-card__stars">${
-                                this.getStars(rating).outerHTML
-                            }</div>
-                            <div class="reviews-card__product font-14 colour-grey3">${product}</div>
-                            ${
-                                comment
-                                    ? '<div class="reviews-card__comment">' +
-                                      comment +
-                                      "</div>"
-                                    : ""
-                            }
-                        </div>
+            reviewsMarkup += `<div class="reviews-card card card--nohover p-4 my-2" data-review="${id}">
+                <div class="row-bs">
+                    <div class="col-md-3 col-xl-2 d-flex flex-wrap align-content-center">
+                        <div class="reviews-card__name font-weight-6 w-100">${name}</div>
+                        <div class="reviews-card__time colour-grey3">${this.parseDate(date)}</div>
                     </div>
-                </a>
+                    <div class="col-md-9 col-xl-10">
+                        <div class="reviews-card__stars">${
+                            this.getStars(rating).outerHTML
+                        }</div>
+                        <div class="reviews-card__product font-14 colour-grey3">${product}</div>
+                        ${
+                            comment
+                                ? '<div class="reviews-card__comment">' +
+                                    comment +
+                                    "</div>"
+                                : ""
+                        }
+                    </div>
+                </div>
             </div>`;
         }
         this.locations.main.innerHTML = reviewsMarkup;
@@ -189,7 +202,7 @@ class Reviews {
             if (startDiff > diffMax) startDiff = diffMax
             if (endDiff > diffMax) endDiff = diffMax
             // Add one and ellipsis if page number is greater than this.paginationIndexCount number
-            if (this.pageNumber - startDiff > 1) {
+            if (this.pageNumber - startDiff > 1 && !this.mobile) {
                 pagination.appendChild(createEl("div","reviews__pages__block reviews__pages__block--index",{ name: "data-index", value: 1 },1))
                 if (this.pageNumber - startDiff > 2) pagination.appendChild(ellipsis.cloneNode(true))
             }
@@ -204,7 +217,7 @@ class Reviews {
                 } 
             }
             // Add ellipsis and final number if page number is less than final number - this.paginationIndexCount numbers
-            if (this.pageNumber + endDiff < totalPages) {
+            if (this.pageNumber + endDiff < totalPages && !this.mobile) {
                 if (this.pageNumber + endDiff < totalPages - 1)  pagination.appendChild(ellipsis)
                 pagination.appendChild(createEl("div","reviews__pages__block reviews__pages__block--index",{ name: "data-index", value: totalPages }, totalPages))
             }
@@ -272,8 +285,12 @@ class Reviews {
         const previousIndex = this.paginationIndexCount
         if (window.innerWidth < 768) {
             this.paginationIndexCount = 3
+            this.pageSize = 3
+            this.mobile = true
         } else {
             this.paginationIndexCount = 5
+            this.pageSize = 5
+            this.mobile = false
         }
 
         if (previousIndex !== this.paginationIndexCount) this.getReviews()

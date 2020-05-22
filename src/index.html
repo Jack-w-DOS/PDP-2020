@@ -233,7 +233,13 @@
                 <div class="my-2">
                     <h1 class="font-22 font-md-26 font-xl-34 font-weight-4 pt-md-3 text-center text-md-left">Narrow Stave Black American Walnut Worktops
                     </h1>
-                    <div class="reviews-head d-flex justify-content-center justify-content-md-start align-items-center text-center text-md-left my-2" data-scroll="#product-reviews" data-scroll-click="#product-reviews > .collapse-box__head">
+                    <div class="reviews-head d-flex justify-content-center justify-content-md-start align-items-center text-center text-md-left my-2" data-scroll="#product-reviews" data-scroll-callback="
+                    (function () {
+                        var box = document.getElementById('product-reviews');
+                        var head = box.querySelector('.collapse-box__head');
+                        if (box.className.indexOf('--open') === -1) head.click();
+                    })();
+                    ">
                     </div>
                 </div>
 
@@ -259,10 +265,18 @@
                 <div class="d-md-none d-xl-block text-md-center font-12 mt-3 align-self-end">
                     <div class="row-bs">
                         <div class="col-md px-2 px-md-3">
-                            <a href="">
-                                <div class="d-flex flex-wrap justify-content-md-center h-100">
-                                    <div class="col-1 col-md-auto px-0">
-                                        <svg class="products-usp__icon" xmlns="http://www.w3.org/2000/svg" id="Calendar_Copy_2" width="27" height="27" data-name="Calendar Copy 2" viewBox="0 0 27 27">
+                            <div class="d-flex flex-wrap justify-content-md-center h-100 modal">
+                                <!-- <div class="modal__back"></div> -->
+                                <div class="modal__window">
+                                    <!-- <div class="modal__close">&times;</div> -->
+                                    <div class="p-3 text-left font-16">
+                                        <div class="font-weight-5">WRAS Approved</div>
+                                        <p class="mt-3">This text is placeholder. Whole products such as valves, boilers & showers undergo mechanical and water quality testing. This type of approval demonstrates compliance with requirements of the regulations and byelaws,
+                                            provided the fitting is installed according to any conditions given with the approval.</p>
+                                    </div>
+                                </div>
+                                <div class="col-1 col-md-auto px-0">
+                                    <svg class="products-usp__icon" xmlns="http://www.w3.org/2000/svg" id="Calendar_Copy_2" width="27" height="27" data-name="Calendar Copy 2" viewBox="0 0 27 27">
                                             <g id="Rectangle" style="stroke: #1b9fa8;stroke-miterlimit: 10;stroke-width: 3px;fill: none;">
                                                 <path d="M0 0h27v24H0z" stroke="none" transform="translate(0 3)" />
                                                 <path d="M1.5 1.5h24v21h-24z" style="stroke: #1b9fa8;stroke-miterlimit: 10;stroke-width: 3px;fill: none;" transform="translate(0 3)" />
@@ -279,18 +293,16 @@
                                             <path id="Line_Copy_3" d="M.5 0v3.24" style="stroke: #1b9fa8;stroke-miterlimit: 10;stroke-width: 3px;fill: none;" data-name="Line Copy 3"
                                                 transform="translate(22)" />
                                         </svg>
-                                    </div>
-                                    <div class="py-2 align-self-end"><span class="underline colour-teal">Choose a
+                                </div>
+                                <div class="py-2 align-self-end"><span class="underline colour-teal">Choose a
                                             delivery
                                             day,</span> Mon - Sat available</div>
-                                </div>
-                            </a>
+                            </div>
                         </div>
                         <div class="col-md px-2 px-md-3">
-                            <a href="">
-                                <div class="d-flex flex-wrap justify-content-md-center h-100">
-                                    <div class="col-1 col-md-auto px-0">
-                                        <svg class="products-usp__icon" xmlns="http://www.w3.org/2000/svg" width="30.633" height="35.372" viewBox="0 0 30.633 35.372">
+                            <div class="d-flex flex-wrap justify-content-md-center h-100">
+                                <div class="col-1 col-md-auto px-0">
+                                    <svg class="products-usp__icon" xmlns="http://www.w3.org/2000/svg" width="30.633" height="35.372" viewBox="0 0 30.633 35.372">
                                             <g id="prefix__Group_78" data-name="Group 78"
                                                 transform="translate(-939.313 -698.268)">
                                                 <path id="prefix__Polygon"
@@ -304,18 +316,16 @@
                                                     data-name="Line 4" transform="translate(950.63 715.954)" />
                                             </g>
                                         </svg>
-                                    </div>
-                                    <div class="py-2 align-self-end"><span class="underline colour-teal">Next day
-                                            delivery</span> on orders before noon
-                                    </div>
                                 </div>
-                            </a>
+                                <div class="py-2 align-self-end"><span class="underline colour-teal">Next day
+                                            delivery</span> on orders before noon
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md px-2 px-md-3">
-                            <a href="">
-                                <div class="d-flex flex-wrap justify-content-md-center h-100">
-                                    <div class="col-1 col-md-auto px-0">
-                                        <svg class="products-usp__icon" xmlns="http://www.w3.org/2000/svg" width="40.137" height="40.069" viewBox="0 0 40.137 40.069">
+                            <div class="d-flex flex-wrap justify-content-md-center h-100">
+                                <div class="col-1 col-md-auto px-0">
+                                    <svg class="products-usp__icon" xmlns="http://www.w3.org/2000/svg" width="40.137" height="40.069" viewBox="0 0 40.137 40.069">
                                             <g id="prefix__Group_130" data-name="Group 130"
                                                 transform="translate(-134.833 -180.333)">
                                                 <g id="prefix__Group_38" data-name="Group 38"
@@ -339,10 +349,9 @@
                                                 </g>
                                             </g>
                                         </svg>
-                                    </div>
-                                    <div class="py-2 align-self-end">This worktop can be <span class="underline colour-teal">customised</span></div>
                                 </div>
-                            </a>
+                                <div class="py-2 align-self-end">This worktop can be <span class="underline colour-teal">customised</span></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -353,10 +362,9 @@
         <div class="col-9 mx-auto my-4 d-none d-md-block d-xl-none text-md-center font-12 align-self-end">
             <div class="row-bs">
                 <div class="col-md px-2 px-md-3">
-                    <a href="">
-                        <div class="d-flex flex-wrap justify-content-md-center h-100">
-                            <div class="col-1 col-md-auto px-0">
-                                <svg class="products-usp__icon" xmlns="http://www.w3.org/2000/svg" id="Calendar_Copy_2" width="27" height="27" data-name="Calendar Copy 2" viewBox="0 0 27 27">
+                    <div class="d-flex flex-wrap justify-content-md-center h-100">
+                        <div class="col-1 col-md-auto px-0">
+                            <svg class="products-usp__icon" xmlns="http://www.w3.org/2000/svg" id="Calendar_Copy_2" width="27" height="27" data-name="Calendar Copy 2" viewBox="0 0 27 27">
                                     <g id="Rectangle" style="stroke: #1b9fa8;stroke-miterlimit: 10;stroke-width: 3px;fill: none;">
                                         <path d="M0 0h27v24H0z" stroke="none" transform="translate(0 3)" />
                                         <path d="M1.5 1.5h24v21h-24z" style="stroke: #1b9fa8;stroke-miterlimit: 10;stroke-width: 3px;fill: none;" transform="translate(0 3)" />
@@ -373,18 +381,16 @@
                                     <path id="Line_Copy_3" d="M.5 0v3.24" style="stroke: #1b9fa8;stroke-miterlimit: 10;stroke-width: 3px;fill: none;" data-name="Line Copy 3"
                                         transform="translate(22)" />
                                 </svg>
-                            </div>
-                            <div class="py-2 align-self-end"><span class="underline colour-teal">Choose a
+                        </div>
+                        <div class="py-2 align-self-end"><span class="underline colour-teal">Choose a
                                     delivery
                                     day,</span> Mon - Sat available</div>
-                        </div>
-                    </a>
+                    </div>
                 </div>
                 <div class="col-md px-2 px-md-3">
-                    <a href="">
-                        <div class="d-flex flex-wrap justify-content-md-center h-100">
-                            <div class="col-1 col-md-auto px-0">
-                                <svg class="products-usp__icon" xmlns="http://www.w3.org/2000/svg" width="30.633" height="35.372" viewBox="0 0 30.633 35.372">
+                    <div class="d-flex flex-wrap justify-content-md-center h-100">
+                        <div class="col-1 col-md-auto px-0">
+                            <svg class="products-usp__icon" xmlns="http://www.w3.org/2000/svg" width="30.633" height="35.372" viewBox="0 0 30.633 35.372">
                                     <g id="prefix__Group_78" data-name="Group 78"
                                         transform="translate(-939.313 -698.268)">
                                         <path id="prefix__Polygon"
@@ -398,18 +404,16 @@
                                             data-name="Line 4" transform="translate(950.63 715.954)" />
                                     </g>
                                 </svg>
-                            </div>
-                            <div class="py-2 align-self-end"><span class="underline colour-teal">Next day
-                                    delivery</span> on orders before noon
-                            </div>
                         </div>
-                    </a>
+                        <div class="py-2 align-self-end"><span class="underline colour-teal">Next day
+                                    delivery</span> on orders before noon
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md px-2 px-md-3">
-                    <a href="">
-                        <div class="d-flex flex-wrap justify-content-md-center h-100">
-                            <div class="col-1 col-md-auto px-0">
-                                <svg class="products-usp__icon" xmlns="http://www.w3.org/2000/svg" width="40.137" height="40.069" viewBox="0 0 40.137 40.069">
+                    <div class="d-flex flex-wrap justify-content-md-center h-100">
+                        <div class="col-1 col-md-auto px-0">
+                            <svg class="products-usp__icon" xmlns="http://www.w3.org/2000/svg" width="40.137" height="40.069" viewBox="0 0 40.137 40.069">
                                     <g id="prefix__Group_130" data-name="Group 130"
                                         transform="translate(-134.833 -180.333)">
                                         <g id="prefix__Group_38" data-name="Group 38"
@@ -433,10 +437,9 @@
                                         </g>
                                     </g>
                                 </svg>
-                            </div>
-                            <div class="py-2 align-self-end">This worktop can be <span class="underline colour-teal">customised</span></div>
                         </div>
-                    </a>
+                        <div class="py-2 align-self-end">This worktop can be <span class="underline colour-teal">customised</span></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1033,7 +1036,7 @@
             </div>
             <!-- Reviews -->
             <div class="reviews collapse-box my-2" id="product-reviews">
-                <div class="collapse-box__head reviews__banner p-3 text-center">
+                <div class="collapse-box__head reviews__banner p-3 text-center font-weight-5 d-flex align-items-center justify-content-center">
                     Reviews
                 </div>
                 <div class="collapse-box__wrap">

@@ -4,6 +4,7 @@ import ProductFilters from './modules/productFilters'
 import sticky from './modules/sticky'
 import Reviews from './modules/reviews'
 import SmoothScroll from './modules/smoothScroll'
+import Modal from './modules/modal'
 // import FormControl from './modules/formControl'
 
 import "./style.css";
@@ -26,3 +27,6 @@ sticky(".tab-filter", ".tab-filter__cart", 155);
 new ProductFilters('.tab-filter')
 
 new SmoothScroll()
+
+const modals = document.querySelectorAll('.modal');
+for (const mod of modals) new Modal(mod)

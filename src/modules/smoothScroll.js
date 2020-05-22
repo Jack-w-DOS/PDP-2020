@@ -4,18 +4,16 @@ class SmoothScroll {
     }
     scroll = () => {
         const targetValue = event.currentTarget.getAttribute("data-scroll");
-        const clickElement = event.currentTarget.getAttribute("data-scroll-click");
-        let clickElementTarget;
-        console.log(clickElement)
-        if (clickElement) {
-            clickElementTarget = document.querySelector(clickElement);
-            console.log(clickElementTarget)
-            clickElementTarget.click()
-        }
+        const callback = event.currentTarget.getAttribute(
+            "data-scroll-callback"
+        );
         const target = document.querySelector(targetValue);
-        const rect = target.getBoundingClientRect()
+        const rect = target.getBoundingClientRect();
         if (target) {
             window.scrollBy({ top: rect.y, behavior: "smooth" });
+        }
+        if (callback) {
+            Function(callback)();
         }
     };
     init() {

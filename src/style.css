@@ -142,7 +142,7 @@ p:last-of-type {
 }
 
 .zoom-slider__main--tip::after {
-    content: 'Double tap to zoom';
+    content: 'Tap to zoom';
     position: absolute;
     color: #fff;
     background-color: #4d4a49;
@@ -495,4 +495,60 @@ transform: translateY(-50%);
 [data-sort="quantity"] {
     width: 105px;
     text-align: end;
+}
+
+.modal {
+    position: relative;
+    cursor: pointer;
+}
+
+.modal__window {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 90%;
+    transform: translate(-50%, 100%) scale(0);
+    background: #fff;
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.5);
+    z-index: 150;
+    transition: all .3s;
+    opacity: 0;
+}
+
+@media (min-width: 768px) {
+    .modal__window {
+        width: auto;
+    }
+}
+
+.modal--active .modal__window {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.modal__close {
+    padding: 5px 10px;
+    font-size: 26px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+}
+
+.modal__back {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 100;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .3s;
+}
+
+.modal--active .modal__back {
+    visibility: visible;
+    opacity: 1;
 }

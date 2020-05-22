@@ -1,5 +1,5 @@
 class CollapseBox {
-    constructor(element, boxname) {
+    constructor(element) {
         this.element = element;
         this.head = this.element.querySelector(".collapse-box__head");
         this.wrap = this.element.querySelector(".collapse-box__wrap");
