@@ -36,7 +36,6 @@ class FormControl {
             this.input.input.value = 1;
             currentQuantity = 1;
         }
-        console.log(currentQuantity)
         this.zeroInputs()
         this.relative.id = event.target.value
         this.relative.product = this.multiadd.querySelector('div[name="' + this.relative.id + '"]')
@@ -55,6 +54,7 @@ class FormControl {
             this.cartBtn.classList.remove('cart__btn--active')
             this.cartBtn.addEventListener('click', this.preventSubmit)
         }
+        this.clearErrorClasses()
     }
     preventSubmit = () => {
         event.preventDefault()
@@ -62,19 +62,20 @@ class FormControl {
             this.select.classList.add('prodopt-control__select--error');
             this.selectLabel.classList.add('colour-red')
         }
-        if (!this.quantitySelected) {
+        if (!this.quantitySelected || this.input.input.value <= 0) {
             this.input.main.classList.add('increment-input--error');
             this.input.label.classList.add('colour-red')
         }
-        setTimeout(() => {
-            this.input.main.classList.remove('increment-input--error')
-            this.select.classList.remove('prodopt-control__select--error');
-            this.selectLabel.classList.remove('colour-red')
-            this.input.label.classList.remove('colour-red')
-        }, 2000)
+    }
+    clearErrorClasses = () => { 
+        this.input.main.classList.remove('increment-input--error')
+        this.select.classList.remove('prodopt-control__select--error');
+        this.selectLabel.classList.remove('colour-red')
+        this.input.label.classList.remove('colour-red')
     }
     handleInputChange = () => {
         if (!this.relative.input) {
+            this.preventSubmit()
             return event.target.value = 0
         }
         this.inputValue = event.target.value

@@ -27,12 +27,15 @@ class ZoomSlider {
             move: null,
             dist: null,
         };
+        this.doubleTap = false;
+        this.tapTimer = new Date().getTime()
         this.config = config;
         this.tipActive = true;
         this.init();
     }
     zoomEnter = () => {
         const el = event.currentTarget;
+        this.zoomed = true;
         el.addEventListener("mouseleave", this.zoomLeave.bind(this, el));
         el.addEventListener("mousemove", this.zoomMove.bind(this, el));
         // Set the dimensions of the currently hovered item for use in transforms
@@ -69,28 +72,78 @@ class ZoomSlider {
     zoomLeave = (el) => {
         el.removeEventListener("mousemove", this.zoomMove);
         this.hideZoomItem();
+        this.zoomed = false
     };
     touchStart = () => {
         event.preventDefault();
+        if (new Date().getTime() - this.tapTimer < 500) this.doubleTap = !this.doubleTap
+        
+        this.tapTimer = new Date().getTime()
+
         const el = event.currentTarget;
         this.currentItemSize.width = el.offsetWidth;
         this.currentItemSize.height = el.offsetHeight;
+        this.touch.start = event.touches[0].clientX;
+        this.touch.dist = 0;
         this.zoomItem = el.querySelector(".zoom-slider__item__zoom");
         
-        this.showZoomItem();
-        this.zoomMove.call(this, event.target);
+        if (this.doubleTap) {
+            this.showZoomItem();
+            this.zoomMove.call(this, event.target);
+        } else {
+            this.hideZoomItem()
+            this.wrap.style.transition = 'none';
+            el.addEventListener("touchend", this.touchEnd);
+        }
         el.addEventListener("touchmove", this.touchMove);
-        el.addEventListener("touchend", this.touchEnd);
         if (this.tipActive) {
             this.main.classList.remove('zoom-slider__main--tip');
             this.tipActive = false;
         }
     };
     touchMove = () => {
-        this.zoomMove.call(this, event.target);
+        if (this.doubleTap) {
+            this.zoomMove.call(this, event.target);
+        } else {
+            this.touch.move = event.touches[0].clientX;
+            this.touch.dist = this.touch.start - this.touch.move;
+
+            this.wrap.style.transform = `translateX(-${
+                this.currentSlidePosition + this.touch.dist
+            }px)`;
+        }
     };
     touchEnd = () => {
-        this.hideZoomItem()
+        if (!this.doubleTap) {
+            this.hideZoomItem()
+            this.currentSlidePosition += this.touch.dist;
+            this.wrap.style.transition = null;
+            this.centerSlide();
+        }
+    };
+    centerSlide = () => {
+        const lengthArray = Array.from(this.items).map(
+            (item, i) => this.slideWidth * i
+        );
+        let arrayIndex = 0;
+        for (let i = 0; i < lengthArray.length; i++) {
+            if (
+                this.currentSlidePosition >
+                lengthArray[i] + this.slideWidth / 2
+            ) {
+                arrayIndex = i + 1;
+            }
+            if (this.currentSlidePosition <= 0) {
+                arrayIndex = 0;
+            }
+            if (this.currentSlidePosition + this.slideWidth > this.totalWidth) {
+                arrayIndex = this.items.length - 1;
+            }
+        }
+        this.currentSlidePosition = this.slideWidth * arrayIndex;
+        this.activeSlide = arrayIndex;
+        this.wrap.style.transform = `translateX(-${this.currentSlidePosition}px)`;
+        this.updateUI();
     };
     showZoomItem = () => {
         // Loop through the picture element replacing data-src/set with src/set
@@ -110,6 +163,7 @@ class ZoomSlider {
         this.zoomItem.classList.add("zoom-slider__item__zoom--active");
     };
     hideZoomItem = () => {
+        this.doubleTap = false;
         this.zoomItem && this.zoomItem.classList.remove("zoom-slider__item__zoom--active");
     };
     slideLeft = () => {

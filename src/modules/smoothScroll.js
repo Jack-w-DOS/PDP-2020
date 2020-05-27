@@ -10,7 +10,9 @@ class SmoothScroll {
         const target = document.querySelector(targetValue);
         const rect = target.getBoundingClientRect();
         if (target) {
+            const isIE11 = navigator.userAgent.match(/Trident.*rv\:11\./);
             window.scrollBy({ top: rect.y, behavior: "smooth" });
+            if (isIE11) window.scrollBy(0, rect.y);
         }
         if (callback) {
             Function(callback)();

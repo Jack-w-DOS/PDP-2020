@@ -51,7 +51,7 @@ class Reviews {
         // Set page info that does not change
         this.setHead();    
         const banner = document.querySelector('.reviews__banner')
-        banner.insertAdjacentElement('beforeend', this.getStars(this.summaryData.rating.rating, 21,'review-star-wrapper--banner', '#f5f3f2'))
+        banner.insertAdjacentElement('beforeend', this.getStars(this.summaryData.rating.rating, 21,'mb-1 px-2', '#f5f3f2'))
         banner.innerHTML += '<img class="d-none d-md-inline" srcset="https://res.cloudinary.com/dy7hqiitw/image/upload/w_60/worktop-express-uk/brands/feefo-logo.png 1x, https://res.cloudinary.com/dy7hqiitw/image/upload/w_120/worktop-express-uk/brands/feefo-logo.png 2x" alt="Feefo logo">';
 
         this.locations.summary.innerHTML += `${this.getStars(this.summaryData.rating.rating, 27, null, null, '<img class="d-inline-block pl-2" srcset="https://res.cloudinary.com/dy7hqiitw/image/upload/w_60/worktop-express-uk/brands/feefo-logo.png 1x, https://res.cloudinary.com/dy7hqiitw/image/upload/w_120/worktop-express-uk/brands/feefo-logo.png 2x" alt="Feefo logo">').outerHTML}`
@@ -69,6 +69,7 @@ class Reviews {
     getStars = (rating, size = 21, modifier, coverBG, addMarkup) => {
         const starWrapper = document.createElement("div")
         starWrapper.classList.add('d-inline-block');
+        if (modifier) starWrapper.className += ' ' + modifier;
         const wholeStar = `<svg class="review-star" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 9.4 9.4">
                 <g transform="translate(-70.6 -160.6)">
                     <path d="M5.434,7.794,2.529,9.4,3.084,6,.734,3.59l3.248-.5L5.434,0,6.887,3.094l3.248.5L7.784,6l.555,3.4Z" transform="translate(69.866 160.6)" fill="#f7b538"></path>

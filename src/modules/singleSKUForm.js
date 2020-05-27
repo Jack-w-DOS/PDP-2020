@@ -15,6 +15,7 @@ class FormControl {
     }
 
     buttonClass = () => {
+        this.removeErrorClasses()
         if (this.inVal() > 0) {
             this.cartBtn.classList.add('cart__btn--active')
         } else {
@@ -44,14 +45,14 @@ class FormControl {
         }
         this.buttonClass()
     }
+    removeErrorClasses = () => {
+        this.main.classList.remove('increment-input--error')
+        this.input.label.classList.remove('colour-red')
+    }
     submitCheck = () => {
         if (this.inVal() <= 0) {
             this.main.classList.add('increment-input--error')
             this.input.label.classList.add('colour-red')
-            setTimeout(() => {
-                this.main.classList.remove('increment-input--error')
-                this.input.label.classList.remove('colour-red')
-            }, 2000)
             event.preventDefault()
         }
     }
@@ -61,7 +62,6 @@ class FormControl {
         this.input.subtract.addEventListener('click', this.decrement)
         this.form.addEventListener('submit', this.submitCheck)
         this.buttonClass()
-        console.log(this)
     }
 }
 new FormControl()
