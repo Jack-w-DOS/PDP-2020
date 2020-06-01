@@ -51,8 +51,8 @@ class ZoomSlider {
     zoomMove = (el) => {
         let rect = el.getBoundingClientRect();
         const position = {
-            x: (event.pageX || event.touches[0].pageX) - window.scrollX - rect.left,
-            y: (event.pageY || event.touches[0].pageY) - (window.scrollY + rect.top),
+            x: (event.pageX || event.touches[0].pageX) - window.pageXOffset - rect.left,
+            y: (event.pageY || event.touches[0].pageY) - (window.pageYOffset + rect.top),
         };
         // Convert position to a percentage to be used in transform
         const percentage = {
@@ -104,7 +104,7 @@ class ZoomSlider {
     touchMove = () => {
         if (this.doubleTap) {
             this.zoomMove.call(this, event.target);
-        } else {
+        } else if (this.items.length > 1) {
             this.touch.move = event.touches[0].clientX;
             this.touch.dist = this.touch.start - this.touch.move;
 
@@ -148,19 +148,19 @@ class ZoomSlider {
     showZoomItem = () => {
         // Loop through the picture element replacing data-src/set with src/set
         const pictureChildNodes = this.zoomItem.childNodes;
-        pictureChildNodes.forEach((child) => {
+        Array.from(pictureChildNodes).forEach((child) => {
             if (child.nodeType === Node.ELEMENT_NODE) {
-                const [source, dataSource, dataSourceSet] = [
-                    child.getAttribute("src"),
-                    child.getAttribute("data-src"),
+                const [source, dataSource] = [
+                    child.getAttribute("srcset"),
                     child.getAttribute("data-srcset"),
                 ];
                 if (source) return;
-                dataSource && child.setAttribute("src", source);
-                dataSourceSet && child.setAttribute("srcset", dataSourceSet);
+                child.setAttribute("srcset", dataSource);
+                child.removeAttribute("data-srcset")
             }
         });
         this.zoomItem.classList.add("zoom-slider__item__zoom--active");
+        picturefill({reevaluate: true})
     };
     hideZoomItem = () => {
         this.doubleTap = false;
@@ -193,7 +193,7 @@ class ZoomSlider {
         this.updatePreview();
     };
     updatePreview = () => {
-        this.preview.items.forEach((item) =>
+        Array.from(this.preview.items).forEach((item) =>
             item.classList.remove("zoom-slider__preview__item--active")
         );
         this.preview.items[this.activeSlide].classList.add(
@@ -220,21 +220,21 @@ class ZoomSlider {
         // Create preview markup
         let previewMarkup = '<div class="zoom-slider__preview">';
         let currentImages = Array.from(this.items).map((item) => {
-            return (
-                item.querySelector("img").getAttribute("srcset") ||
-                item.querySelector("img").getAttribute("src") ||
-                item.querySelector("img").getAttribute("data-srcset") ||
-                item.querySelector("img").getAttribute("data-src")
-            );
+            return item.querySelector("img").getAttribute("srcset");
         });
         let images = this.config.previewImages || currentImages;
         const imageString = images.map((img, index) => {
+            console.log(img)
             // TODO: split string and alter width cloudinary pararmeter
             if (!this.config.previewImages) {
-                img = img.split('upload').join('upload/w_103,h_103,c_fill,f_auto/')
+                const imgSplit = img.split(/,\s+/)
+                const img1x = imgSplit[0].replace(/upload\/.*?\//g, 'upload/w_103,h_103,c_fill/');
+                const img2x = imgSplit[1].replace(/upload\/.*?\//g, 'upload/w_206,h_206,c_fill/');
+                img = `${img1x}, ${img2x}`
             }
+            console.log(img)
             return `<div class="zoom-slider__preview__item" data-slider-preview="${index}">
-                        <img src="${img}" alt="Image preview">
+                        <img srcset="${img}" alt="Image preview">
                     </div>`;
         }).join('');
         previewMarkup += (imageString + "</div>");
@@ -245,7 +245,7 @@ class ZoomSlider {
             items: this.slider.querySelectorAll(".zoom-slider__preview__item"),
         };
         // Add events
-        this.preview.items.forEach((item) => {
+        Array.from(this.preview.items).forEach((item) => {
             item.addEventListener("click", this.previewControl);
         });
     }
@@ -270,11 +270,11 @@ class ZoomSlider {
         this.wrap.style.transform = `translateX(-${this.currentSlidePosition}px)`;
     };
     init() {
-        this.items.forEach((item) => {
+        Array.from(this.items).forEach((item) => {
             item.addEventListener("mouseover", this.zoomEnter);
             item.addEventListener("touchstart", this.touchStart);
         });
-        this.setUI();
+        if (this.items.length > 1) this.setUI();
         // Add double tap to zoom tip if device has touch capabilities
         if ('ontouchstart' in window || navigator.msMaxTouchPoints) {
             this.main.classList.add('zoom-slider__main--tip');

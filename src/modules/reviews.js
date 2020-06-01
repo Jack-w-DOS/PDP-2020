@@ -19,34 +19,75 @@ class Reviews {
     }
     getReviews = () => {
         this.showLoading()
-        fetch(
-            `https://api.feefo.com/api/10/reviews/product?merchant_identifier=worktop-express&parent_product_sku=${this.productNumber}&full_thread=include&empty_product_comments=include&page_size=${this.pageSize}&page=${this.pageNumber}`
-        )
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                this.reviewsData = data;
-                if (!data.reviews.length) return this.removeReviews()
+        // fetch(
+        //     `https://api.feefo.com/api/10/reviews/product?merchant_identifier=worktop-express&parent_product_sku=${this.productNumber}&full_thread=include&empty_product_comments=include&page_size=${this.pageSize}&page=${this.pageNumber}`
+        // )
+        //     .then((response) => {
+        //         return response.json();
+        //     })
+        //     .then((data) => {
+        //         this.reviewsData = data;
+        //         if (!data.reviews.length) return this.removeReviews()
+        //         this.hideLoading()
+        //         this.setMain();
+        //         this.setPagesUI();
+        //     })
+        //     .catch((e) => {
+        //         console.error(e);
+        //     });
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = () => {
+
+            if (xhr.readyState !== 4) return;
+
+            if (xhr.status >= 200 && xhr.status < 300) {
+                this.reviewsData = JSON.parse(xhr.responseText);
+                if (!this.reviewsData.reviews.length) return this.removeReviews()
                 this.hideLoading()
                 this.setMain();
                 this.setPagesUI();
-            })
-            .catch((e) => {
-                console.error(e);
-            });
+            } else {
+                console.log('error', xhr);
+            }
+
+        };
+
+        xhr.open('GET', `https://api.feefo.com/api/10/reviews/product?merchant_identifier=worktop-express&parent_product_sku=${this.productNumber}&full_thread=include&empty_product_comments=include&page_size=${this.pageSize}&page=${this.pageNumber}`);
+        xhr.send();
     };
     getSummary = () => {
-        fetch(
-            `https://api.feefo.com/api/10/reviews/summary/product?merchant_identifier=worktop-express&parent_product_sku=${this.productNumber}`
-        )
-            .then((response) => response.json())
-            .then((data) => {
-                if (!data.meta.count) return false
-                this.summaryData = data;
-                this.setStatic()
-            });
-        };
+        // fetch(
+        //     `https://api.feefo.com/api/10/reviews/summary/product?merchant_identifier=worktop-express&parent_product_sku=${this.productNumber}`
+        // )
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         if (!data.meta.count) return false
+        //         this.summaryData = data;
+        //         this.setStatic()
+        //     });
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = () => {
+    
+                if (xhr.readyState !== 4) return;
+    
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    var data = JSON.parse(xhr.responseText)
+                    if (!data.meta.count) return false
+                    this.summaryData = data;
+                    this.setStatic()
+                } else {
+                    console.log('error', xhr);
+                }
+    
+            };
+    
+            xhr.open('GET', `https://api.feefo.com/api/10/reviews/summary/product?merchant_identifier=worktop-express&parent_product_sku=${this.productNumber}`);
+            xhr.send();       
+    };
     setStatic = () => {
         // Set page info that does not change
         this.setHead();    
@@ -103,7 +144,6 @@ class Reviews {
                 ? review.customer.display_name
                 : "Trusted Customer";
             const id = review.products[0].id;
-            const url = review.url;
             const date = review.products[0].created_at;
             const rating = review.products[0].rating.rating;
             const product = review.products[0].product.title;
@@ -166,6 +206,8 @@ class Reviews {
             return el;
         };
         const pagination = createEl("div", "reviews__pages mx-auto");
+        const isIE11 = !!navigator.userAgent.match(/Trident.*rv\:11\./);
+        if (isIE11) pagination.classList.add('reviews__pages--iefix');
         const leftControl = createEl(
             "div",
             "reviews__pages__block reviews__pages__block--control reviews__pages__block--control--left"

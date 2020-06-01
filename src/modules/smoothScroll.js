@@ -10,18 +10,15 @@ class SmoothScroll {
         const target = document.querySelector(targetValue);
         const rect = target.getBoundingClientRect();
         if (target) {
-            const isIE11 = navigator.userAgent.match(/Trident.*rv\:11\./);
-            window.scrollBy({ top: rect.y, behavior: "smooth" });
-            if (isIE11) window.scrollBy(0, rect.y);
+            window.scroll(0, rect.top) || window.scrollTo(0, rect.top) || window.scrollTo({ top: rect.y, behavior: "smooth" });
         }
         if (callback) {
             Function(callback)();
         }
     };
     init() {
-        document
-            .querySelector("[data-scroll]")
-            .addEventListener("click", this.scroll);
+        const items = document.querySelectorAll("[data-scroll]")
+        Array.from(items).forEach(item => item.addEventListener("click", this.scroll))
     }
 }
 
