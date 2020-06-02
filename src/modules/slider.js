@@ -224,7 +224,6 @@ class ZoomSlider {
         });
         let images = this.config.previewImages || currentImages;
         const imageString = images.map((img, index) => {
-            console.log(img)
             // TODO: split string and alter width cloudinary pararmeter
             if (!this.config.previewImages) {
                 const imgSplit = img.split(/,\s+/)
@@ -232,7 +231,6 @@ class ZoomSlider {
                 const img2x = imgSplit[1].replace(/upload\/.*?\//g, 'upload/w_206,h_206,c_fill/');
                 img = `${img1x}, ${img2x}`
             }
-            console.log(img)
             return `<div class="zoom-slider__preview__item" data-slider-preview="${index}">
                         <img srcset="${img}" alt="Image preview">
                     </div>`;

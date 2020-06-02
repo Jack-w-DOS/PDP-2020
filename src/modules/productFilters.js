@@ -1,6 +1,7 @@
 class ProductFilters {
     constructor(main, defaultFilter = 0) {
         this.main = document.querySelector(main);
+        this.form = this.main.closest('form');
         this.columns = this.main.querySelectorAll(".tab-filter__col");
         this.sortIcons = this.main.querySelectorAll(".tab-filter__col i");
         this.filters = this.main.querySelectorAll(".tab-filter__tab");
@@ -8,15 +9,17 @@ class ProductFilters {
         this.products = {
             container: this.main.querySelector(".tab-filter__wrap"),
             items: this.main.querySelectorAll(".tab-filter__item"),
+            showing: () => this.main.querySelectorAll(".tab-filter__item.d-flex")
         };
         this.inputs = {
             block: this.main.querySelectorAll(".increment-input"),
             input: this.main.querySelectorAll(".increment-input__input"),
         };
+        this.cartSummary = document.querySelector('.tab-filter__cart')
         this.summary = {
-            items: document.querySelector(".cart-index"),
-            total: document.querySelector(".total-index"),
-            button: document.querySelector('.cart__btn')
+            items: this.cartSummary.querySelector(".cart-index"),
+            total: this.cartSummary.querySelector(".total-index"),
+            button: this.cartSummary.querySelector('.cart__btn')
         };
         this.sort = {
             type: null,
@@ -134,6 +137,7 @@ class ProductFilters {
         }
         // Sort Icons
         this.updateIcons(sort);
+        this.setOddClass();
     };
     updateIcons = (column) => {
         const currentIcon = column.querySelector("i");
@@ -163,7 +167,14 @@ class ProductFilters {
         for (const filter of this.filters)
             filter.classList.remove("tab-filter__tab--active");
         target.classList.add("tab-filter__tab--active");
+        this.setOddClass()
     };
+    setOddClass = () => {
+        Array.from(this.products.items).forEach(item => item.classList.remove('tab-filter__item--odd'))
+        Array.from(this.products.showing()).forEach((item, i) => {
+            if (i % 2) item.classList.add('tab-filter__item--odd')
+        })
+    }
     urlParams = () => {
         const urlParams = new URLSearchParams(window.location.search).entries()
         let filter, sort;
@@ -191,15 +202,23 @@ class ProductFilters {
         this.createInputs();
         addEvents("focus", this.inputs.input, this.handleFocus);
         addEvents("change", this.inputs.input, this.handleChange);
-        for (const el of this.filters)
-            el.addEventListener("click", this.filterItems.bind(this, el));
-            for (const el of this.columns)
-            el.addEventListener("click", this.sortItems.bind(this, el));
-
+        for (const el of this.filters) el.addEventListener("click", this.filterItems.bind(this, el));
+        for (const el of this.columns) el.addEventListener("click", this.sortItems.bind(this, el));
+        this.form.addEventListener('submit', this.preventCart)
+        this.setOddClass()
         // Trigger default filter
         this.filterItems(this.filters[this.defaultFilter]);
         // Filter through URL parameters on load
         this.urlParams()
+        window.addEventListener('load', () => {
+            Array.from(this.inputs.input).forEach(input => {    
+                if (parseInt(input.value)) {
+                    this.state.items += parseInt(input.value)
+                    this.state.price += this.getPrice(input) * input.value
+                }
+            })
+            this.updateSummary()
+        })
     };
 }
 

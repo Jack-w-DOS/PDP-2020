@@ -9,8 +9,12 @@ class SmoothScroll {
         );
         const target = document.querySelector(targetValue);
         const rect = target.getBoundingClientRect();
-        if (target) {
-            window.scroll(0, rect.top) || window.scrollTo(0, rect.top) || window.scrollTo({ top: rect.y, behavior: "smooth" });
+        const unsupportedBrowser = navigator.appVersion.indexOf('Trident/') > -1 || RegExp(/ip(ad|hone).*version\/(9|10)/i).test(navigator.appVersion);
+
+        if (!unsupportedBrowser && target) {
+            window.scrollBy({ top: rect.y, behavior: "smooth" });
+        } else {
+            window.scrollTo(0, rect.top)
         }
         if (callback) {
             Function(callback)();

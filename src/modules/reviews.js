@@ -92,10 +92,10 @@ class Reviews {
         // Set page info that does not change
         this.setHead();    
         const banner = document.querySelector('.reviews__banner')
-        banner.insertAdjacentElement('beforeend', this.getStars(this.summaryData.rating.rating, 21,'mb-1 px-2', '#f5f3f2'))
+        banner.insertAdjacentElement('beforeend', this.getStars(this.summaryData.rating.rating, 21,'mb-1 px-2'))
         banner.innerHTML += '<img class="d-none d-md-inline" srcset="https://res.cloudinary.com/dy7hqiitw/image/upload/w_60/worktop-express-uk/brands/feefo-logo.png 1x, https://res.cloudinary.com/dy7hqiitw/image/upload/w_120/worktop-express-uk/brands/feefo-logo.png 2x" alt="Feefo logo">';
 
-        this.locations.summary.innerHTML += `${this.getStars(this.summaryData.rating.rating, 27, null, null, '<img class="d-inline-block pl-2" srcset="https://res.cloudinary.com/dy7hqiitw/image/upload/w_60/worktop-express-uk/brands/feefo-logo.png 1x, https://res.cloudinary.com/dy7hqiitw/image/upload/w_120/worktop-express-uk/brands/feefo-logo.png 2x" alt="Feefo logo">').outerHTML}`
+        this.locations.summary.innerHTML += `${this.getStars(this.summaryData.rating.rating, 27, null, '<img class="d-inline-block pl-2" srcset="https://res.cloudinary.com/dy7hqiitw/image/upload/w_60/worktop-express-uk/brands/feefo-logo.png 1x, https://res.cloudinary.com/dy7hqiitw/image/upload/w_120/worktop-express-uk/brands/feefo-logo.png 2x" alt="Feefo logo">').outerHTML}`
         this.locations.summary.innerHTML += `<div class="font-14 colour-grey4">Rated ${this.summaryData.rating.rating} / 5 Based on ${this.summaryData.meta.count} reviews</div>`
     }
     setHead = () => {
@@ -107,16 +107,17 @@ class Reviews {
         );
         this.locations.head.innerHTML += headString;
     };
-    getStars = (rating, size = 21, modifier, coverBG, addMarkup) => {
+    getStars = (rating, size = 21, modifier, addMarkup) => {
         const starWrapper = document.createElement("div")
         starWrapper.classList.add('d-inline-block');
         if (modifier) starWrapper.className += ' ' + modifier;
-        const wholeStar = `<svg class="review-star" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 9.4 9.4">
+        const isIOS9 = navigator.appVersion.indexOf('Version/9');
+        const wholeStar = `<svg class="${isIOS9 < 0 && 'review-star'}" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 9.4 9.4">
                 <g transform="translate(-70.6 -160.6)">
                     <path d="M5.434,7.794,2.529,9.4,3.084,6,.734,3.59l3.248-.5L5.434,0,6.887,3.094l3.248.5L7.784,6l.555,3.4Z" transform="translate(69.866 160.6)" fill="#f7b538"></path>
                 </g>
             </svg>`;
-        const halfStar = `<svg xmlns="http://www.w3.org/2000/svg" width="${size/2}" height="${size}" viewBox="0 0 9.4 19.6">
+        const halfStar = `<svg class="${isIOS9 < 0 && 'review-star'}" xmlns="http://www.w3.org/2000/svg" width="${size/2}" height="${size}" viewBox="0 0 9.4 19.6">
                 <path id="Path_70" data-name="Path 70" d="M-816.257-323.4v0l1.156-7.09-4.9-5.022,6.772-1.034L-810.2-343v16.252l-6.055,3.347Z" transform="translate(820 343)" fill="#f7b538"/>
             </svg>
             `;
@@ -134,6 +135,7 @@ class Reviews {
         }
 
         if (addMarkup) starWrapper.innerHTML += addMarkup
+
         return starWrapper;
     };
     setMain = () => {
