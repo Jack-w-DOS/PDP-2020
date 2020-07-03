@@ -146,6 +146,11 @@ class ZoomSlider {
         this.updateUI();
     };
     showZoomItem = () => {
+
+        const image = this.zoomItem.querySelector('img');
+        image.addEventListener('load', () => {
+            this.main.classList.remove('zoom-slider__main--loading')
+        })
         // Loop through the picture element replacing data-src/set with src/set
         const pictureChildNodes = this.zoomItem.childNodes;
         Array.from(pictureChildNodes).forEach((child) => {
@@ -154,7 +159,12 @@ class ZoomSlider {
                     child.getAttribute("srcset"),
                     child.getAttribute("data-srcset"),
                 ];
-                if (source) return;
+                // Has already loaded
+                if (!source) {
+                    this.main.classList.add('zoom-slider__main--loading')
+                } else {
+                    return
+                };
                 child.setAttribute("srcset", dataSource);
                 child.removeAttribute("data-srcset")
             }
