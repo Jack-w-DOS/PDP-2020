@@ -63,7 +63,7 @@ class Reviews {
         // )
         //     .then((response) => response.json())
         //     .then((data) => {
-        //         if (!data.meta.count) return false
+        //         if (!data.rating.product.count) return false
         //         this.summaryData = data;
         //         this.setStatic()
         //     });
@@ -76,7 +76,7 @@ class Reviews {
     
                 if (xhr.status >= 200 && xhr.status < 300) {
                     var data = JSON.parse(xhr.responseText)
-                    if (!data.meta.count) return false
+                    if (!data.rating.product.count) return false
                     this.summaryData = data;
                     this.setStatic()
                 } else {
@@ -96,11 +96,11 @@ class Reviews {
         banner.innerHTML += '<img class="d-none d-md-inline" srcset="https://res.cloudinary.com/dy7hqiitw/image/upload/w_60/worktop-express-uk/brands/feefo-logo.png 1x, https://res.cloudinary.com/dy7hqiitw/image/upload/w_120/worktop-express-uk/brands/feefo-logo.png 2x" alt="Feefo logo">';
 
         this.locations.summary.innerHTML += `${this.getStars(this.summaryData.rating.rating, 27, null, '<img class="d-inline-block pl-2" srcset="https://res.cloudinary.com/dy7hqiitw/image/upload/w_60/worktop-express-uk/brands/feefo-logo.png 1x, https://res.cloudinary.com/dy7hqiitw/image/upload/w_120/worktop-express-uk/brands/feefo-logo.png 2x" alt="Feefo logo">').outerHTML}`
-        this.locations.summary.innerHTML += `<div class="font-14 colour-grey4">Rated ${this.summaryData.rating.rating} / 5 Based on ${this.summaryData.meta.count} reviews</div>`
+        this.locations.summary.innerHTML += `<div class="font-14 colour-grey4">Rated ${this.summaryData.rating.rating} / 5 Based on ${this.summaryData.rating.product.count} reviews</div>`
     }
     setHead = () => {
         if (this.summaryData.rating.rating < 3) return
-        const headString = `<div class="reviews-head__index col-md-auto col-md px-0 font-12 font-md-15 underline colour-grey3 pt-1 pt-md-0 pl-md-2">(${this.summaryData.meta.count} customer reviews)</div>`;
+        const headString = `<div class="reviews-head__index col-md-auto col-md px-0 font-12 font-md-15 underline colour-grey3 pt-1 pt-md-0 pl-md-2">(${this.summaryData.rating.product.count} customer reviews)</div>`;
         this.locations.head.insertAdjacentElement(
             "afterbegin",
             this.getStars(this.summaryData.rating.rating)

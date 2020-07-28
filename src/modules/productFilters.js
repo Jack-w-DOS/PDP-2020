@@ -9,12 +9,20 @@ class ProductFilters {
         this.products = {
             container: this.main.querySelector(".tab-filter__wrap"),
             items: this.main.querySelectorAll(".tab-filter__item"),
-            showing: () => this.main.querySelectorAll(".tab-filter__item.d-flex")
+            showing: () => this.main.querySelectorAll(".tab-filter__item.d-flex"),
+            hidden: () => this.main.querySelectorAll(".tab-filter__item.d-none"),
         };
         this.inputs = {
             block: this.main.querySelectorAll(".increment-input"),
             input: this.main.querySelectorAll(".increment-input__input"),
         };
+        this.alert = this.main.querySelector('.tab-filter__alert')
+        this.alert = {
+            main: this.alert,
+            index: this.alert.querySelector('.hidden-index'),
+            text: this.alert.querySelector('.hidden-text'),
+            button: this.alert.querySelector('.button'),
+        }
         this.cartSummary = document.querySelector('.tab-filter__cart')
         this.summary = {
             items: this.cartSummary.querySelector(".cart-index"),
@@ -30,6 +38,7 @@ class ProductFilters {
             price: 0,
             inputValue: 0,
         };
+        console.log(this.alert)
         this.init();
     }
     createInputs = () => {
@@ -168,6 +177,7 @@ class ProductFilters {
             filter.classList.remove("tab-filter__tab--active");
         target.classList.add("tab-filter__tab--active");
         this.setOddClass()
+        this.handleWarningMessage()
     };
     setOddClass = () => {
         Array.from(this.products.items).forEach(item => item.classList.remove('tab-filter__item--odd'))
@@ -192,6 +202,26 @@ class ProductFilters {
         filter && this.filterItems.call(this, filter)
         sort && this.sortItems.call(this, sort)
     }
+    handleWarningMessage = () => {
+        // 1. Get all hidden items
+        const hiddenItems = Array.from(this.products.hidden())
+        const hasAdded = []
+        hiddenItems.forEach(el => {
+            const input = el.querySelector('.increment-input__input')
+            if (input.value > 0) hasAdded.push(el);
+        })
+        
+        if (hasAdded.length) {
+            // Show and update message
+            this.alert.main.classList.add('tab-filter__alert--active')
+            this.alert.index.innerHTML = hasAdded.length
+            this.alert.text.innerHTML = ` cart ${hasAdded.length > 1 ? 'items are' : 'item is'} hidden by filters.`;
+        } else {
+            // Hide message
+            this.alert.main.classList.remove('tab-filter__alert--active')
+        }
+
+    }
     preventCart = () => {
         if (this.state.items <= 0) event.preventDefault()
     }
@@ -202,6 +232,7 @@ class ProductFilters {
         this.createInputs();
         addEvents("focus", this.inputs.input, this.handleFocus);
         addEvents("change", this.inputs.input, this.handleChange);
+        this.alert.button.addEventListener('click', this.filterItems.bind(this, this.alert.button))
         for (const el of this.filters) el.addEventListener("click", this.filterItems.bind(this, el));
         for (const el of this.columns) el.addEventListener("click", this.sortItems.bind(this, el));
         this.form.addEventListener('submit', this.preventCart)

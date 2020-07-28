@@ -61,5 +61,11 @@ using data attributes you can attach a target element using a query selector to 
                     "></div>
 ```
 
+## Read more
+
+## Modal
+
+## Relative Modal
+
 ## Compiling script
 Script should be compiled using the [babel online web app](https://babeljs.io/). Each module should be included minus the export code. Compiling through webpack is not possible currently as it requires initialization in order to be consider for compilation. We cannot initialize here as the use cases differ and handled on a case by case basis.

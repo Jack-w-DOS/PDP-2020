@@ -21,12 +21,19 @@ new Reviews('SNK-CR-RE-INSET-1/5-RL301CW')
 
 sticky(".tab-filter", ".tab-filter__cart", 155);
 
-// const formInputs = document.querySelectorAll('.increment-input')
-// for (const el of formInputs) new FormControl(el)
-
 new ProductFilters('.tab-filter')
 
 new SmoothScroll()
 
 const modals = document.querySelectorAll('.modal');
 for (const mod of modals) new Modal(mod)
+
+export default {
+    CollapseBox,
+    ZoomSlider,
+    ProductFilters,
+    sticky,
+    Reviews,
+    SmoothScroll,
+    Modal
+}

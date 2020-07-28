@@ -8,6 +8,9 @@ module.exports = {
     output: {
         filename: "[name].bundle.js",
         path: path.resolve(__dirname, "docs"),
+        library: 'productDisplay',
+        libraryTarget: 'var',
+        libraryExport: 'default'
     },
     optimization: {
         minimizer: [
