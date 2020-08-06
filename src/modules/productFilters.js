@@ -1,7 +1,7 @@
 class ProductFilters {
     constructor(main, defaultFilter = 0) {
         this.main = document.querySelector(main);
-        this.form = this.main.closest('form');
+        this.form = document.querySelector('#product-filters > form');
         this.columns = this.main.querySelectorAll(".tab-filter__col");
         this.sortIcons = this.main.querySelectorAll(".tab-filter__col i");
         this.filters = this.main.querySelectorAll(".tab-filter__tab");
