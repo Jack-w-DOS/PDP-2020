@@ -38,7 +38,6 @@ class ProductFilters {
             price: 0,
             inputValue: 0,
         };
-        console.log(this.alert)
         this.init();
     }
     createInputs = () => {
@@ -186,6 +185,7 @@ class ProductFilters {
         })
     }
     urlParams = () => {
+        if (typeof URLSearchParams === 'undefined') return false;
         const urlParams = new URLSearchParams(window.location.search).entries()
         let filter, sort;
         for (let ent of urlParams) {
@@ -232,7 +232,7 @@ class ProductFilters {
         this.createInputs();
         addEvents("focus", this.inputs.input, this.handleFocus);
         addEvents("change", this.inputs.input, this.handleChange);
-        this.alert.button.addEventListener('click', this.filterItems.bind(this, this.alert.button))
+        this.alert.button.addEventListener('click', this.filterItems.bind(this, this.filters[this.filters.length - 1]))
         for (const el of this.filters) el.addEventListener("click", this.filterItems.bind(this, el));
         for (const el of this.columns) el.addEventListener("click", this.sortItems.bind(this, el));
         this.form.addEventListener('submit', this.preventCart)

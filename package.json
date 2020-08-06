@@ -4,7 +4,7 @@
     "description": "",
     "main": "script.js",
     "scripts": {
-        "build": "webpack",
+        "build": "webpack --production",
         "dev": "webpack --development",
         "start": "webpack-dev-server --open --hot --host 0.0.0.0 --port 3000"
     },

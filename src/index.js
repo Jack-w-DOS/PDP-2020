@@ -5,28 +5,28 @@ import sticky from './modules/sticky'
 import Reviews from './modules/reviews'
 import SmoothScroll from './modules/smoothScroll'
 import Modal from './modules/modal'
-// import FormControl from './modules/formControl'
+import RelativeModal from './modules/relativeModal'
 
-import "./style.css";
+// import "./style.css";
 
-const mainProductSlider = document.querySelector(".zoom-slider");
-const zoomSlider = new ZoomSlider(".zoom-slider", {
-    buildImagePreview: true
-});
+// const mainProductSlider = document.querySelector(".zoom-slider");
+// const zoomSlider = new ZoomSlider(".zoom-slider", {
+//     buildImagePreview: true
+// });
 
-const collapseBoxes = document.querySelectorAll(".collapse-box");
-for (const el of collapseBoxes) new CollapseBox(el);
+// const collapseBoxes = document.querySelectorAll(".collapse-box");
+// for (const el of collapseBoxes) new CollapseBox(el);
 
-new Reviews('SNK-CR-RE-INSET-1/5-RL301CW')
+// new Reviews('SNK-CR-RE-INSET-1/5-RL301CW')
 
-sticky(".tab-filter", ".tab-filter__cart", 155);
+// sticky(".tab-filter", ".tab-filter__cart", 155);
 
-new ProductFilters('.tab-filter')
+// new ProductFilters('.tab-filter')
 
-new SmoothScroll()
+// new SmoothScroll()
 
-const modals = document.querySelectorAll('.modal');
-for (const mod of modals) new Modal(mod)
+// const modals = document.querySelectorAll('.modal');
+// for (const mod of modals) new Modal(mod)
 
 export default {
     CollapseBox,
@@ -35,5 +35,6 @@ export default {
     sticky,
     Reviews,
     SmoothScroll,
-    Modal
+    Modal,
+    RelativeModal
 }

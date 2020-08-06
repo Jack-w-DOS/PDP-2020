@@ -29,14 +29,6 @@ class RelativeModal {
         this.relativeContent.outer.classList.remove('rel-modal__content--active')
     }
     outerClick = () => {
-        let targetElement = event.target
-        while (targetElement) {
-            if (this.relativeContent.outer == targetElement) {
-                // Clicked inside
-                return
-            }
-            targetElement = targetElement.parentElement
-        }
         this.close()
     }
 
@@ -73,5 +65,10 @@ class RelativeModal {
         this.contentOverlay.style.display = 'none';
     }
 }
+
+// const relModals = document.querySelectorAll('.rel-modal__item')
+// Array.from(relModals).forEach(modal => {
+//     new RelativeModal('.rel-modal', modal, modal.querySelector('.rel-modal__item__overlay'))
+// })
 
 export default RelativeModal
