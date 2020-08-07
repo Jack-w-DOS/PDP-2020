@@ -6,6 +6,7 @@ import Reviews from './modules/reviews'
 import SmoothScroll from './modules/smoothScroll'
 import Modal from './modules/modal'
 import RelativeModal from './modules/relativeModal'
+import ReadMore from './modules/readMore'
 
 // import "./style.css";
 
@@ -36,5 +37,6 @@ export default {
     Reviews,
     SmoothScroll,
     Modal,
-    RelativeModal
+    RelativeModal,
+    ReadMore
 }
