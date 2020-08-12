@@ -1,11 +1,13 @@
+// TODO: Add full responsive options, not just max viewport.
+
 class ReadMore {
     constructor(content, options) {
         this.content = content;
         this.wrapper = null;
         this.button = null;
         this.open = false;
-        this.transitionSpeed = 0.4;
         this.options = {
+            transitionSpeed: null,
             show: true,
             moreText: 'Read more.',
             lessText: 'Read less.',
@@ -16,9 +18,13 @@ class ReadMore {
         this.init()
     }
     addWrapper = () => {
-        const wrappedContent = '<div class="read-more__wrapper" style="transition:height ' + this.transitionSpeed + 's;">' + this.content.innerHTML + '</div>';
-        this.content.innerHTML = wrappedContent;
-        this.wrapper = this.content.querySelector('.read-more__wrapper');
+        const wrappedContent = document.createElement('div');
+        wrappedContent.classList.add('read-more__wrapper');
+        wrappedContent.innerHTML = this.content.innerHTML;
+        if (this.options.transitionSpeed) wrappedContent.style.transition = this.options.transitionSpeed + 's';
+        this.content.innerHTML = '';
+        this.content.appendChild(wrappedContent);
+        this.wrapper = wrappedContent
     }
     addButton = () => {
         const button = document.createElement('button')
@@ -33,12 +39,10 @@ class ReadMore {
     toggleState = () => {
         if (this.open) {
             this.wrapper.style.height = '0px';
-            this.wrapper.style.display = 'none';
             this.content.classList.remove('read-more--open')
             this.open = false
         } else {
             this.wrapper.style.height = this.wrapper.scrollHeight + 'px';
-            this.wrapper.style.display = null
             this.content.classList.add('read-more--open')
             this.open = true
         }
@@ -66,7 +70,6 @@ class ReadMore {
         this.button.addEventListener('click', this.toggleState)
         window.addEventListener('resize', this.handleResize)
         this.handleResize()
-        console.log(this)
     }
 }
 
