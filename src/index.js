@@ -7,6 +7,7 @@ import SmoothScroll from './modules/smoothScroll'
 import Modal from './modules/modal'
 import RelativeModal from './modules/relativeModal'
 import ReadMore from './modules/readMore'
+import SingleInputControl from './modules/singleInputControl'
 
 // import "./style.css";
 
@@ -38,5 +39,6 @@ export default {
     SmoothScroll,
     Modal,
     RelativeModal,
-    ReadMore
+    ReadMore,
+    SingleInputControl
 }
