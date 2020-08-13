@@ -1,18 +1,19 @@
 class Reviews {
-    constructor(
-        productNumber,
-        locations = { head: ".reviews-head", main: ".reviews__main", summary: ".reviews__summary", box: "#product-reviews" }
-    ) {
+    constructor(productNumber, options = {
+            merchantID: 'worktop-express',
+            locations: { head: ".reviews-head", main: ".reviews__main", summary: ".reviews__summary", box: "#product-reviews" }
+    }) {
         this.productNumber = productNumber;
         this.pageSize = window.innerWidth < 768 ? 3 : 5;;
         this.pageNumber = 1;
         this.reviewsData = null;
         this.mobile = window.innerWidth < 768 ? true : false;
+        this.merchantID = options.merchantID
         this.locations = {
-            head: document.querySelector(locations.head),
-            main: document.querySelector(locations.main),
-            summary: document.querySelector(locations.summary),
-            box: document.querySelector(locations.box)
+            head: document.querySelector(options.locations.head),
+            main: document.querySelector(options.locations.main),
+            summary: document.querySelector(options.locations.summary),
+            box: document.querySelector(options.locations.box)
         };
         this.paginationIndexCount = window.innerWidth < 768 ? 3 : 5;
         this.init();
@@ -20,7 +21,7 @@ class Reviews {
     getReviews = () => {
         this.showLoading()
         // fetch(
-        //     `https://api.feefo.com/api/10/reviews/product?merchant_identifier=worktop-express&parent_product_sku=${this.productNumber}&full_thread=include&empty_product_comments=include&page_size=${this.pageSize}&page=${this.pageNumber}`
+        //     `https://api.feefo.com/api/10/reviews/product?merchant_identifier=${this.merchantID}&parent_product_sku=${this.productNumber}&full_thread=include&empty_product_comments=include&page_size=${this.pageSize}&page=${this.pageNumber}`
         // )
         //     .then((response) => {
         //         return response.json();
@@ -54,12 +55,12 @@ class Reviews {
 
         };
 
-        xhr.open('GET', `https://api.feefo.com/api/10/reviews/product?merchant_identifier=worktop-express&parent_product_sku=${this.productNumber}&full_thread=include&empty_product_comments=include&page_size=${this.pageSize}&page=${this.pageNumber}`);
+        xhr.open('GET', `https://api.feefo.com/api/10/reviews/product?merchant_identifier=${this.merchantID}&parent_product_sku=${this.productNumber}&full_thread=include&empty_product_comments=include&page_size=${this.pageSize}&page=${this.pageNumber}`);
         xhr.send();
     };
     getSummary = () => {
         // fetch(
-        //     `https://api.feefo.com/api/10/reviews/summary/product?merchant_identifier=worktop-express&parent_product_sku=${this.productNumber}`
+        //     `https://api.feefo.com/api/10/reviews/summary/product?merchant_identifier=${this.merchantID}&parent_product_sku=${this.productNumber}`
         // )
         //     .then((response) => response.json())
         //     .then((data) => {
@@ -85,7 +86,7 @@ class Reviews {
     
             };
     
-            xhr.open('GET', `https://api.feefo.com/api/10/reviews/summary/product?merchant_identifier=worktop-express&parent_product_sku=${this.productNumber}`);
+            xhr.open('GET', `https://api.feefo.com/api/10/reviews/summary/product?merchant_identifier=${this.merchantID}&parent_product_sku=${this.productNumber}`);
             xhr.send();       
     };
     setStatic = () => {
@@ -94,13 +95,31 @@ class Reviews {
         const banner = document.querySelector('.reviews__banner')
         banner.insertAdjacentElement('beforeend', this.getStars(this.summaryData.rating.rating, 21,'mb-1 px-2'))
         banner.innerHTML += '<img class="d-none d-md-inline" srcset="https://res.cloudinary.com/dy7hqiitw/image/upload/w_60/worktop-express-uk/brands/feefo-logo.png 1x, https://res.cloudinary.com/dy7hqiitw/image/upload/w_120/worktop-express-uk/brands/feefo-logo.png 2x" alt="Feefo logo">';
+        
+        switch(this.merchantID) {
+            case 'worktop-express-gmbh': // WEX DE
+                this.locations.summary.innerHTML += `${this.getStars(this.summaryData.rating.rating, 27, null, '<img class="d-inline-block pl-2" srcset="https://res.cloudinary.com/dy7hqiitw/image/upload/w_60/worktop-express-uk/brands/feefo-logo.png 1x, https://res.cloudinary.com/dy7hqiitw/image/upload/w_120/worktop-express-uk/brands/feefo-logo.png 2x" alt="Feefo logo">').outerHTML}`;
+                this.locations.summary.innerHTML += `<div class="font-14 colour-grey4">Bewertet mit ${this.summaryData.rating.rating} / 5 basierend auf ${this.summaryData.rating.product.count} Bewertungen</div>`;
+                break;
 
-        this.locations.summary.innerHTML += `${this.getStars(this.summaryData.rating.rating, 27, null, '<img class="d-inline-block pl-2" srcset="https://res.cloudinary.com/dy7hqiitw/image/upload/w_60/worktop-express-uk/brands/feefo-logo.png 1x, https://res.cloudinary.com/dy7hqiitw/image/upload/w_120/worktop-express-uk/brands/feefo-logo.png 2x" alt="Feefo logo">').outerHTML}`
-        this.locations.summary.innerHTML += `<div class="font-14 colour-grey4">Rated ${this.summaryData.rating.rating} / 5 Based on ${this.summaryData.rating.product.count} reviews</div>`
+            default: // WEX UK
+                this.locations.summary.innerHTML += `${this.getStars(this.summaryData.rating.rating, 27, null, '<img class="d-inline-block pl-2" srcset="https://res.cloudinary.com/dy7hqiitw/image/upload/w_60/worktop-express-uk/brands/feefo-logo.png 1x, https://res.cloudinary.com/dy7hqiitw/image/upload/w_120/worktop-express-uk/brands/feefo-logo.png 2x" alt="Feefo logo">').outerHTML}`;
+                this.locations.summary.innerHTML += `<div class="font-14 colour-grey4">Rated ${this.summaryData.rating.rating} / 5 Based on ${this.summaryData.rating.product.count} reviews</div>`;
+        }
     }
     setHead = () => {
         if (this.summaryData.rating.rating < 3) return
-        const headString = `<div class="reviews-head__index col-md-auto col-md px-0 font-12 font-md-15 underline colour-grey3 pt-1 pt-md-0 pl-md-2">(${this.summaryData.rating.product.count} customer reviews)</div>`;
+        
+        let headString;
+        switch(this.merchantID){
+            case 'worktop-express-gmbh': // WEX DE
+                headString = `<div class="reviews-head__index col-md-auto col-md px-0 font-12 font-md-15 underline colour-grey3 pt-1 pt-md-0 pl-md-2">(${this.summaryData.rating.product.count} Kundenbewertungen)</div>`;
+                break;
+
+            default: // WEX UK
+                headString = `<div class="reviews-head__index col-md-auto col-md px-0 font-12 font-md-15 underline colour-grey3 pt-1 pt-md-0 pl-md-2">(${this.summaryData.rating.product.count} customer reviews)</div>`; 
+        }
+
         this.locations.head.insertAdjacentElement(
             "afterbegin",
             this.getStars(this.summaryData.rating.rating)
@@ -181,19 +200,41 @@ class Reviews {
         const convertedDate = new Date(date).getTime()
         const dayDiff = Math.round((currentDate - convertedDate)/(1000*60*60*24))
         const monthDiff = Math.round((currentDate - convertedDate)/(1000*60*60*24*31))
-        if (dayDiff < 1) {
-            return 'Today'
-        } else if (dayDiff === 1) {
-            return 'Yesterday'
-        } else if (dayDiff > 1 && dayDiff <= 31) {
-            return `${dayDiff} days ago`
-        } else if (monthDiff <= 1){
-            return `a month ago`
-        } else if (monthDiff < 12) {
-            return `${monthDiff} months ago`
+
+        if (this.merchantID == 'worktop-express-gmbh'){
+
+            if (dayDiff < 1) {
+                return 'Heute'
+            } else if (dayDiff === 1) {
+                return 'Gestern'
+            } else if (dayDiff > 1 && dayDiff <= 31) {
+                return `Vor ${dayDiff} Tagen`
+            } else if (monthDiff <= 1){
+                return `vor einem Monat`
+            } else if (monthDiff < 12) {
+                return `Vor ${monthDiff} Monaten`
+            } else {
+                return 'vor &uuml;ber einem Jahr'
+            }
+
         } else {
-            return 'over a year ago'
+
+            if (dayDiff < 1) {
+                return 'Today'
+            } else if (dayDiff === 1) {
+                return 'Yesterday'
+            } else if (dayDiff > 1 && dayDiff <= 31) {
+                return `${dayDiff} days ago`
+            } else if (monthDiff <= 1){
+                return `a month ago`
+            } else if (monthDiff < 12) {
+                return `${monthDiff} months ago`
+            } else {
+                return 'over a year ago'
+            }
+
         }
+
     }
     setPagesUI = () => {
         if (this.reviewsData.summary.meta.pages <= 1) return;
