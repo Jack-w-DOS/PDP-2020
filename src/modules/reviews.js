@@ -20,7 +20,7 @@ class Reviews {
     getReviews = () => {
         this.showLoading()
         // fetch(
-        //     `https://api.feefo.com/api/10/reviews/product?merchant_identifier=worktop-express&parent_product_sku=${this.productNumber}&full_thread=include&empty_product_comments=include&page_size=${this.pageSize}&page=${this.pageNumber}`
+        //     `https://api.feefo.com/api/10/reviews/product?merchant_identifier=worktop-express-gmbh&parent_product_sku=${this.productNumber}&full_thread=include&empty_product_comments=include&page_size=${this.pageSize}&page=${this.pageNumber}`
         // )
         //     .then((response) => {
         //         return response.json();
@@ -54,12 +54,12 @@ class Reviews {
 
         };
 
-        xhr.open('GET', `https://api.feefo.com/api/10/reviews/product?merchant_identifier=worktop-express&parent_product_sku=${this.productNumber}&full_thread=include&empty_product_comments=include&page_size=${this.pageSize}&page=${this.pageNumber}`);
+        xhr.open('GET', `https://api.feefo.com/api/10/reviews/product?merchant_identifier=worktop-express-gmbh&parent_product_sku=${this.productNumber}&full_thread=include&empty_product_comments=include&page_size=${this.pageSize}&page=${this.pageNumber}`);
         xhr.send();
     };
     getSummary = () => {
         // fetch(
-        //     `https://api.feefo.com/api/10/reviews/summary/product?merchant_identifier=worktop-express&parent_product_sku=${this.productNumber}`
+        //     `https://api.feefo.com/api/10/reviews/summary/product?merchant_identifier=worktop-express-gmbh&parent_product_sku=${this.productNumber}`
         // )
         //     .then((response) => response.json())
         //     .then((data) => {
@@ -85,7 +85,7 @@ class Reviews {
     
             };
     
-            xhr.open('GET', `https://api.feefo.com/api/10/reviews/summary/product?merchant_identifier=worktop-express&parent_product_sku=${this.productNumber}`);
+            xhr.open('GET', `https://api.feefo.com/api/10/reviews/summary/product?merchant_identifier=worktop-express-gmbh&parent_product_sku=${this.productNumber}`);
             xhr.send();       
     };
     setStatic = () => {
