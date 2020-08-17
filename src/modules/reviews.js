@@ -201,7 +201,7 @@ class Reviews {
         const dayDiff = Math.round((currentDate - convertedDate)/(1000*60*60*24))
         const monthDiff = Math.round((currentDate - convertedDate)/(1000*60*60*24*31))
 
-        if (this.merchantID == 'worktop-express-gmbh'){
+        if (this.options.merchantID == 'worktop-express-gmbh'){
 
             if (dayDiff < 1) {
                 return 'Heute'
