@@ -9,27 +9,27 @@ import RelativeModal from './modules/relativeModal'
 import ReadMore from './modules/readMore'
 import SingleInputControl from './modules/singleInputControl'
 
-import "./style.css";
+// import "./style.css";
 
-const mainProductSlider = document.querySelector(".zoom-slider");
-const zoomSlider = new ZoomSlider(".zoom-slider", {
-    buildImagePreview: true
-});
+// const mainProductSlider = document.querySelector(".zoom-slider");
+// const zoomSlider = new ZoomSlider(".zoom-slider", {
+//     buildImagePreview: true
+// });
 
-const collapseBoxes = document.querySelectorAll(".collapse-box");
-for (const el of collapseBoxes) new CollapseBox(el);
+// const collapseBoxes = document.querySelectorAll(".collapse-box");
+// for (const el of collapseBoxes) new CollapseBox(el);
 
-new Reviews('SNK-CR-RE-INSET-1/5-RL301CW')
-new Reviews('WA-OIL-RU-1', {merchantID: 'worktop-express-gmbh'})
+// new Reviews('SNK-CR-RE-INSET-1/5-RL301CW')
+// new Reviews('WA-OIL-RU-1', {merchantID: 'worktop-express-gmbh'})
 
-sticky(".tab-filter", ".tab-filter__cart", 155);
+// sticky(".tab-filter", ".tab-filter__cart", 155);
 
-new ProductFilters('.tab-filter', { defaultFilter: 1, updateSummary: false} )
+// new ProductFilters('.tab-filter', { defaultFilter: 1, updateSummary: false} )
 
-new SmoothScroll()
+// new SmoothScroll()
 
-const modals = document.querySelectorAll('.modal');
-for (const mod of modals) new Modal(mod)
+// const modals = document.querySelectorAll('.modal');
+// for (const mod of modals) new Modal(mod)
 
 export default {
     CollapseBox,
