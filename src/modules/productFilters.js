@@ -1,11 +1,10 @@
 class ProductFilters {
-    constructor(main, defaultFilter = 0) {
+    constructor(main, options) {
         this.main = document.querySelector(main);
         this.form = document.querySelector('#product-filters > form');
         this.columns = this.main.querySelectorAll(".tab-filter__col");
         this.sortIcons = this.main.querySelectorAll(".tab-filter__col i");
         this.filters = this.main.querySelectorAll(".tab-filter__tab");
-        this.defaultFilter = defaultFilter;
         this.products = {
             container: this.main.querySelector(".tab-filter__wrap"),
             items: this.main.querySelectorAll(".tab-filter__item"),
@@ -38,6 +37,11 @@ class ProductFilters {
             price: 0,
             inputValue: 0,
         };
+        this.options = {
+            defaultFilter: 0,
+            updateSummary: true
+        }
+        Object.assign(this.options, options)
         this.init();
     }
     createInputs = () => {
@@ -109,6 +113,7 @@ class ProductFilters {
         event.target.blur();
     };
     updateSummary = () => {
+        if (this.options.updateSummary === false) return false;
         this.summary.items.innerText = this.state.items;
         this.summary.total.innerHTML = `&pound;${this.state.price}`;
         if (this.state.items > 0) {
@@ -238,7 +243,7 @@ class ProductFilters {
         this.form.addEventListener('submit', this.preventCart)
         this.setOddClass()
         // Trigger default filter
-        this.filterItems(this.filters[this.defaultFilter]);
+        this.filterItems(this.filters[this.options.defaultFilter]);
         // Filter through URL parameters on load
         this.urlParams()
         window.addEventListener('load', () => {

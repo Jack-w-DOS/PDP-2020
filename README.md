@@ -68,10 +68,9 @@ If reviews are not found or an error occurs, all reviews markup will be removed 
 
 Products can be filters by specified options, usually various thicknesses, accessories or all. All shown products can be sorted in and ascending or descending fashion.
 
-Default filter can be set by initializing the filters with a specific filter number:
-
+Options can be set as an object parameter:
 ```js
-new ProductFilters(".tab-filter", 1);
+new ProductFilters('.tab-filter', { defaultFilter: 1, updateSummary: false} )
 ```
 
 Note: the default filter is zero indexed, so `0` will trigger the first filter.
