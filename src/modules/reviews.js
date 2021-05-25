@@ -84,6 +84,8 @@ class Reviews {
                         this.getReviews();
                         this.resizeUpdates()
                         window.addEventListener('resize', this.resizeUpdates)
+                    } else {
+                        return this.removeReviews()
                     }
                 } else {
                     console.log('error', xhr);
