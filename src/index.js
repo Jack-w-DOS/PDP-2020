@@ -19,7 +19,7 @@ import SingleInputControl from './modules/singleInputControl'
 // const collapseBoxes = document.querySelectorAll(".collapse-box");
 // for (const el of collapseBoxes) new CollapseBox(el);
 
-// new Reviews('SNK-CR-RE-INSET-1/5-RL301CW')
+// new Reviews("WS-WO-OAK-UK-RANGE")
 // new Reviews('WA-OIL-RU-1', {merchantID: 'worktop-express-gmbh'})
 
 // sticky(".tab-filter", ".tab-filter__cart", 155);

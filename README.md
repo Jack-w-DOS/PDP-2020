@@ -121,6 +121,18 @@ Array.from(readMores).forEach(
 ```
 
 ## Modal
+```html
+<div class="modal">
+    <div>Content</div>
+    <div class="modal__window">
+        Modal content
+    </div>
+</div>
+```
+```js
+var modal = document.querySelector(".modal");
+new utilModal(modal);
+```
 
 ## Relative Modal
 

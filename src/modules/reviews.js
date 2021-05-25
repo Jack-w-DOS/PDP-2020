@@ -1,7 +1,7 @@
 class Reviews {
     constructor(productNumber, options) {
         this.productNumber = productNumber;
-        this.pageSize = window.innerWidth < 768 ? 3 : 5;;
+        this.pageSize = window.innerWidth < 768 ? 3 : 5;
         this.pageNumber = 1;
         this.reviewsData = null;
         this.mobile = window.innerWidth < 768 ? true : false;
@@ -44,8 +44,8 @@ class Reviews {
             if (xhr.readyState !== 4) return;
 
             if (xhr.status >= 200 && xhr.status < 300) {
+                if (this.reviewsData == null && !JSON.parse(xhr.responseText).reviews.length) return this.removeReviews()
                 this.reviewsData = JSON.parse(xhr.responseText);
-                if (!this.reviewsData.reviews.length) return this.removeReviews()
                 this.hideLoading()
                 this.setMain();
                 this.setPagesUI();
@@ -79,7 +79,12 @@ class Reviews {
                     var data = JSON.parse(xhr.responseText)
                     if (!data.rating.product.count) return false
                     this.summaryData = data;
-                    this.setStatic()
+                    if (this.summaryData.rating.rating >= 4) {
+                        this.setStatic()
+                        this.getReviews();
+                        this.resizeUpdates()
+                        window.addEventListener('resize', this.resizeUpdates)
+                    }
                 } else {
                     console.log('error', xhr);
                 }
@@ -387,9 +392,6 @@ class Reviews {
     }
     init() {
         this.getSummary();
-        this.getReviews();
-        this.resizeUpdates()
-        window.addEventListener('resize', this.resizeUpdates)
     }
 }
 
