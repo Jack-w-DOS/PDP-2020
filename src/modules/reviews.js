@@ -21,7 +21,7 @@ class Reviews {
     getReviews = () => {
         this.showLoading()
         // fetch(
-        //     `https://api.feefo.com/api/10/reviews/product?merchant_identifier=${this.options.merchantID}&parent_product_sku=${this.productNumber}&full_thread=include&empty_product_comments=include&page_size=${this.pageSize}&page=${this.pageNumber}`
+        //     `https://api.feefo.com/api/10/reviews/product?merchant_identifier=${this.options.merchantID}&parent_product_sku=${this.productNumber}&full_thread=include&empty_product_comments=include&page_size=${this.pageSize}&page=${this.pageNumber}&since_period=all`
         // )
         //     .then((response) => {
         //         return response.json();
@@ -55,7 +55,7 @@ class Reviews {
 
         };
 
-        xhr.open('GET', `https://api.feefo.com/api/10/reviews/product?merchant_identifier=${this.options.merchantID}&parent_product_sku=${this.productNumber}&full_thread=include&empty_product_comments=include&page_size=${this.pageSize}&page=${this.pageNumber}`);
+        xhr.open('GET', `https://api.feefo.com/api/10/reviews/product?merchant_identifier=${this.options.merchantID}&parent_product_sku=${this.productNumber}&full_thread=include&empty_product_comments=include&page_size=${this.pageSize}&page=${this.pageNumber}&since_period=all`);
         xhr.send();
     };
     getSummary = () => {
@@ -93,7 +93,7 @@ class Reviews {
     
             };
     
-            xhr.open('GET', `https://api.feefo.com/api/10/reviews/summary/product?merchant_identifier=${this.options.merchantID}&parent_product_sku=${this.productNumber}`);
+            xhr.open('GET', `https://api.feefo.com/api/10/reviews/summary/product?merchant_identifier=${this.options.merchantID}&parent_product_sku=${this.productNumber}&since_period=all`);
             xhr.send();       
     };
     setStatic = () => {
