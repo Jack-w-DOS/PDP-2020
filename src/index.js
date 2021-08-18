@@ -24,7 +24,7 @@ import SingleInputControl from './modules/singleInputControl'
 
 // sticky(".tab-filter", ".tab-filter__cart", 155);
 
-// new ProductFilters('.tab-filter', { defaultFilter: 1, updateSummary: false} )
+// new ProductFilters('.tab-filter', { defaultFilter: 1, updateSummary: false, german: true} )
 
 // new SmoothScroll()
 

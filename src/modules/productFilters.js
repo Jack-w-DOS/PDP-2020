@@ -220,7 +220,11 @@ class ProductFilters {
             // Show and update message
             this.alert.main.classList.add('tab-filter__alert--active')
             this.alert.index.innerHTML = hasAdded.length
-            this.alert.text.innerHTML = ` cart ${hasAdded.length > 1 ? 'items are' : 'item is'} hidden by filters.`;
+            if (this.options.german) {
+                this.alert.text.innerHTML = ` Warenkorb-Artikel wird durch gesetzte Filter ausgeblendet.`;
+            } else {
+                this.alert.text.innerHTML = ` cart ${hasAdded.length > 1 ? 'items are' : 'item is'} hidden by filters.`;
+            }
         } else {
             // Hide message
             this.alert.main.classList.remove('tab-filter__alert--active')
