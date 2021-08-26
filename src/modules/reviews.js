@@ -77,7 +77,7 @@ class Reviews {
     
                 if (xhr.status >= 200 && xhr.status < 300) {
                     var data = JSON.parse(xhr.responseText)
-                    if (!data.rating.product.count) return false
+                    if (data.rating.product.count < 1) return this.removeReviews()
                     this.summaryData = data;
                     if (this.summaryData.rating.rating >= 4) {
                         this.setStatic()
