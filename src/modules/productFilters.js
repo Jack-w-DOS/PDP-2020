@@ -114,8 +114,8 @@ class ProductFilters {
     };
     updateSummary = () => {
         if (this.options.updateSummary === false) return false;
-        this.summary.items.innerText = this.state.items;
-        if (!this.options.german) this.state.price = `&pound;${this.state.price}`;
+        this.summary.items.innerText = this.state.items || 0;
+        if (!this.options.german) this.state.price = `&pound;${this.state.price}` || 0;
         this.summary.total.innerHTML = this.state.price;
         if (this.state.items > 0) {
             this.summary.button.classList.add('cart__btn--active')
