@@ -115,7 +115,6 @@ class ProductFilters {
     updateSummary = () => {
         if (this.options.updateSummary === false) return false;
         this.summary.items.innerText = this.state.items || 0;
-        if (!this.options.german) this.state.price = `&pound;${this.state.price}`;
         this.summary.total.innerHTML = this.state.price || 0;
         if (this.state.items > 0) {
             this.summary.button.classList.add('cart__btn--active')
